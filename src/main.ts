@@ -1,7 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
-import { env } from 'node:process';
 
 import { createOpenApiDocument } from '~config/open-api';
 
