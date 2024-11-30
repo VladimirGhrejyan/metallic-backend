@@ -1,6 +1,4 @@
-import { IBaseEntity } from '~common/interfaces';
-
-export interface IProductCategory extends IBaseEntity {
+export interface IProductCategory {
     title: string;
 
     code: string;

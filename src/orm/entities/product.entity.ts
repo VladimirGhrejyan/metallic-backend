@@ -1,38 +1,17 @@
-import {
-    Column,
-    CreateDateColumn,
-    DeleteDateColumn,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    Unique,
-    UpdateDateColumn,
-} from 'typeorm';
-
-import { ProductCategory } from '~orm/entities/product-category.entity';
+import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
 
 import { IProduct } from '~modules/products';
+
+import { BaseEntity } from './base-entity';
+import { ProductCategory } from './product-category.entity';
 
 @Entity()
 @Unique(['title'])
 @Unique(['code'])
-export class Product implements IProduct {
+export class Product extends BaseEntity implements IProduct {
     static readonly TITLE_LENGTH: number = 200;
 
     static readonly CODE_LENGTH: number = 10;
-
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @CreateDateColumn()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date | null;
-
-    @DeleteDateColumn()
-    deletedAt: Date | null;
 
     @Column({ type: 'varchar', length: Product.TITLE_LENGTH, nullable: false })
     title: string;

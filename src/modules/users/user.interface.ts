@@ -1,6 +1,4 @@
-import { IBaseEntity } from '~common/interfaces';
-
-export interface IUser extends IBaseEntity {
+export interface IUser {
     username: string;
 
     password: string;

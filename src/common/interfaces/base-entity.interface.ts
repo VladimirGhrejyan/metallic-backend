@@ -3,7 +3,7 @@ export interface IBaseEntity {
 
     createdAt: Date;
 
-    updatedAt: Date | null;
+    updatedAt: Date;
 
     deletedAt: Date | null;
 }

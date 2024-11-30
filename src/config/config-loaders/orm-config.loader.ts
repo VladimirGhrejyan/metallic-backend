@@ -14,6 +14,7 @@ export const ormConfigLoader = registerAs<TGlobalConfig['orm']>(configKeys.ORM, 
     database: getEnvVar('POSTGRES_DB'),
     entities: [__dirname + '/../orm/entities/**/*.entity{.ts}'],
     namingStrategy: new SnakeNamingStrategy(),
+    useUTC: true,
     synchronize: true,
     autoLoadEntities: true,
 }));
