@@ -45,14 +45,6 @@ export class AuthService {
     }
 
     public async signUp(dto: SignUpInputDto): Promise<TAccessToken> {
-        const existingUser: User | null = await this.usersService.findOneByUsername(
-            pick(dto, 'username'),
-        );
-
-        if (!existingUser) {
-            throw new BadRequestException('username already exists');
-        }
-
         const hashedPassword = await bcrypt.hash(dto.password, this.SALT);
 
         const newUser: Pick<User, 'username' | 'password'> = { ...dto, password: hashedPassword };

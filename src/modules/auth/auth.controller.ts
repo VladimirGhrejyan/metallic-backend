@@ -1,6 +1,8 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { SkipAuth } from '~modules/auth/decorators';
+
 import { AuthService } from './auth.service';
 import { SignInInputDto, SignInOutputDto, SignUpInputDto, SignUpOutputDto } from './common/dto';
 import { TAuthenticatedRequest } from './common/types';
@@ -11,6 +13,7 @@ import { LocalAuthGuard } from './guards';
 export class AuthController {
     constructor(private authService: AuthService) {}
 
+    @SkipAuth()
     @UseGuards(LocalAuthGuard)
     @Post('sign-in')
     @ApiBody({
@@ -21,6 +24,7 @@ export class AuthController {
         return this.authService.signIn(req.user);
     }
 
+    @SkipAuth()
     @Post('sign-up')
     @ApiOperation({ operationId: 'signUp' })
     public async signUp(@Body() dto: SignUpInputDto): Promise<SignUpOutputDto> {

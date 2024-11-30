@@ -1,31 +1,18 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-import { User } from '~orm/entities';
-
 import { TAccessToken } from '~modules/auth/common/types';
+
+import { passwordSchema, usernameSchema } from '~common/schemas';
 
 export const SignUpInputDtoSchema = z
     .object({
-        username: z
-            .string()
-            .trim()
-            .min(1, 'empty string')
-            .max(
-                User.USERNAME_LENGTH,
-                `username should not exceed ${User.USERNAME_LENGTH} characters`,
-            ),
+        username: usernameSchema,
 
-        password: z
-            .string()
-            .trim()
-            .min(1, 'empty string')
-            .max(
-                User.PASSWORD_LENGTH,
-                `password should not exceed ${User.PASSWORD_LENGTH} characters`,
-            ),
+        password: passwordSchema,
     })
-    .required();
+    .required()
+    .strict();
 
 export class SignUpInputDto extends createZodDto(SignUpInputDtoSchema) {}
 
