@@ -10,6 +10,8 @@ import { AuthModule } from '~modules/auth';
 import { JwtGuard } from '~modules/auth/guards';
 import { JwtStrategy } from '~modules/auth/strategy';
 import { CustomConfigModule, CustomConfigService } from '~modules/custom-config';
+import { ProductCategoriesModule } from '~modules/product-categories';
+import { ProductsModule } from '~modules/products';
 import { UsersModule } from '~modules/users';
 
 import { AppController } from './app.controller';
@@ -34,6 +36,10 @@ import { AppService } from './app.service';
         AuthModule,
 
         UsersModule,
+
+        ProductCategoriesModule,
+
+        ProductsModule,
     ],
 
     controllers: [AppController],

@@ -3,9 +3,9 @@ import { z } from 'zod';
 
 import { TAccessToken } from '~modules/auth/common/types';
 
-import { passwordSchema, usernameSchema } from '~common/schemas';
+import { passwordSchema, usernameSchema } from '../schema';
 
-export const SignUpInputDtoSchema = z
+const SignUpInputDtoSchema = z
     .object({
         username: usernameSchema,
 
