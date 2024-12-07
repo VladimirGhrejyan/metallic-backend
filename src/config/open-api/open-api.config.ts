@@ -16,7 +16,11 @@ import {
 export const createOpenApiDocument = async (app: INestApplication): Promise<void> => {
     patchNestJsSwagger();
 
-    const config = new DocumentBuilder().setTitle(APP_TITLE).setVersion(APP_VERSION).build();
+    const config = new DocumentBuilder()
+        .setTitle(APP_TITLE)
+        .setVersion(APP_VERSION)
+        .addBearerAuth()
+        .build();
 
     const document = SwaggerModule.createDocument(app, config);
 

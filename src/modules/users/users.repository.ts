@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -12,6 +12,16 @@ export class UsersRepository {
 
     public async findOneByUsername(criteria: Pick<User, 'username'>): Promise<User | null> {
         return this.usersRepository.findOneBy(criteria);
+    }
+
+    public async getOne(username: User['username']): Promise<User> {
+        const user = await this.usersRepository.findOne({ where: { username } });
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        return user;
     }
 
     public async createOne(userPayload: SignUpInputDto): Promise<void> {
