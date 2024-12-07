@@ -9,8 +9,6 @@ export const UpdateProductCategorySchema = z
 
         code: productCategoryCodeSchema.optional(),
     })
-    .required()
-    .strict()
-    .partial();
+    .strict();
 
 export class UpdateProductCategoryDto extends createZodDto(UpdateProductCategorySchema) {}

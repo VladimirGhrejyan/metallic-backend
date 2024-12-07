@@ -22,7 +22,6 @@ const UpdateProductSchema = z
 
         categoryId: positiveIntegerSchema.optional(),
     })
-    .required()
     .strict();
 
 export class UpdateProductDto extends createZodDto(UpdateProductSchema) {}

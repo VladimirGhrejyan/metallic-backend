@@ -6,7 +6,6 @@ import { BaseEntity } from './base-entity';
 import { ProductCategory } from './product-category.entity';
 
 @Entity()
-@Unique(['title'])
 @Unique(['code'])
 export class Product extends BaseEntity implements IProduct {
     static readonly TITLE_LENGTH: number = 200;

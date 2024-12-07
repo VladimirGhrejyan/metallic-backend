@@ -42,7 +42,7 @@ export class ProductCategoriesRepository {
         await this.productCategoryRepository.softDelete(id);
     }
 
-    private async getCategoryOrThrowException(id: ProductCategory['id']): Promise<ProductCategory> {
+    public async getCategoryOrThrowException(id: ProductCategory['id']): Promise<ProductCategory> {
         const category = await this.productCategoryRepository.findOneBy({ id });
 
         if (!category) {

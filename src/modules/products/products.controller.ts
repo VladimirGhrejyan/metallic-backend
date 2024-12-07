@@ -11,16 +11,22 @@ export class ProductsController {
 
     @Post()
     @ApiOperation({ operationId: 'createProduct' })
-    public async createOne(@Body() dto: CreateProductDto): Promise<void> {}
+    public async createOne(@Body() dto: CreateProductDto): Promise<void> {
+        return this.productsService.createOne(dto);
+    }
 
     @Patch(':id')
     @ApiOperation({ operationId: 'updateProduct' })
     public async updateOne(
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: UpdateProductDto,
-    ): Promise<void> {}
+    ): Promise<void> {
+        return this.productsService.updateOne(id, dto);
+    }
 
     @Delete(':id')
     @ApiOperation({ operationId: 'deleteProduct' })
-    public async deleteOne(@Param('id', ParseIntPipe) id: number): Promise<void> {}
+    public async deleteOne(@Param('id', ParseIntPipe) id: number): Promise<void> {
+        return this.productsService.deleteOne(id);
+    }
 }
