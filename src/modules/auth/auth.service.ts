@@ -5,7 +5,7 @@ import pick from 'lodash.pick';
 
 import { User } from '~orm/entities';
 
-import { UsersService } from '~modules/users';
+import { UsersRepository } from '~modules/users';
 
 import { SignUpInputDto } from './common/dto';
 import { TAccessToken } from './common/types';
@@ -13,7 +13,7 @@ import { TAccessToken } from './common/types';
 @Injectable()
 export class AuthService {
     constructor(
-        private usersService: UsersService,
+        private usersRepository: UsersRepository,
         private jwtService: JwtService,
     ) {}
 
@@ -23,7 +23,7 @@ export class AuthService {
         username: User['username'],
         password: User['password'],
     ): Promise<User> {
-        const user: User | null = await this.usersService.findOneByUsername({ username });
+        const user: User | null = await this.usersRepository.findOneByUsername({ username });
 
         if (!user) {
             throw new BadRequestException('User not found');
@@ -49,7 +49,7 @@ export class AuthService {
 
         const newUser: Pick<User, 'username' | 'password'> = { ...dto, password: hashedPassword };
 
-        await this.usersService.createOne(newUser);
+        await this.usersRepository.createOne(newUser);
 
         return this.signIn(newUser);
     }
