@@ -7,11 +7,17 @@ import { ProductCategory } from '~orm/entities';
 import { CreateProductCategoryDto, UpdateProductCategoryDto } from './common/dto';
 
 @Injectable()
-export class ProductCategoriesRepository {
+export class ProductCategoriesRepository extends Repository<ProductCategory> {
     constructor(
         @InjectRepository(ProductCategory)
         private readonly productCategoryRepository: Repository<ProductCategory>,
-    ) {}
+    ) {
+        super(
+            productCategoryRepository.target,
+            productCategoryRepository.manager,
+            productCategoryRepository.queryRunner,
+        );
+    }
 
     public async createOne(dto: CreateProductCategoryDto): Promise<void> {
         await Promise.all([

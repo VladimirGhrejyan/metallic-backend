@@ -1,6 +1,6 @@
 import { Column, Entity } from 'typeorm';
 
-import { IUser } from '~modules/users';
+import { IUser } from '~common/interfaces';
 
 import { BaseEntity } from './base-entity';
 

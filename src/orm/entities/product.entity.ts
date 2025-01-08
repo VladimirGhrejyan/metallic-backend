@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
 
-import { IProduct } from '~modules/products';
+import { IProduct } from '~common/interfaces';
 
 import { BaseEntity } from './base-entity';
 import { ProductCategory } from './product-category.entity';

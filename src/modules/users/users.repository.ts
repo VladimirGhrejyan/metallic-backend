@@ -7,8 +7,10 @@ import { User } from '~orm/entities';
 import { SignUpInputDto } from '~modules/auth/common/dto';
 
 @Injectable()
-export class UsersRepository {
-    constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) {}
+export class UsersRepository extends Repository<User> {
+    constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) {
+        super(usersRepository.target, usersRepository.manager, usersRepository.queryRunner);
+    }
 
     public async findOneByUsername(criteria: Pick<User, 'username'>): Promise<User | null> {
         return this.usersRepository.findOneBy(criteria);

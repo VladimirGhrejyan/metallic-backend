@@ -9,12 +9,18 @@ import { ProductCategoriesRepository } from '~modules/product-categories';
 import { CreateProductDto, UpdateProductDto } from './common/dto';
 
 @Injectable()
-export class ProductsRepository {
+export class ProductsRepository extends Repository<Product> {
     constructor(
         @InjectRepository(Product) private readonly productsRepository: Repository<Product>,
 
         private readonly categoriesRepository: ProductCategoriesRepository,
-    ) {}
+    ) {
+        super(
+            productsRepository.target,
+            productsRepository.manager,
+            productsRepository.queryRunner,
+        );
+    }
 
     public async createOne(dto: CreateProductDto): Promise<void> {
         await Promise.all([
