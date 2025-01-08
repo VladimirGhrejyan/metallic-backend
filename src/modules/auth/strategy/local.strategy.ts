@@ -11,12 +11,12 @@ import { LOCAL_STRATEGY_KEY } from '../common/constants';
 export class LocalStrategy extends PassportStrategy(Strategy, LOCAL_STRATEGY_KEY) {
     constructor(private authService: AuthService) {
         super({
-            usernameField: 'username',
+            usernameField: 'email',
         });
     }
 
-    public async validate(username: User['username'], password: User['password']): Promise<User> {
-        const user = await this.authService.validateUser(username, password);
+    public async validate(email: User['email'], password: User['password']): Promise<User> {
+        const user = await this.authService.validateUser(email, password);
 
         if (!user) {
             throw new UnauthorizedException();

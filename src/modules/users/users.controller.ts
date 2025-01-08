@@ -15,6 +15,6 @@ export class UsersController {
     @Get('me')
     @ApiOperation({ operationId: 'getMe' })
     public async getMe(@Request() { user }: TAuthenticatedRequest): Promise<GetMeOutputDto> {
-        return this.usersService.getMe(user.username);
+        return this.usersService.getMe(user.email);
     }
 }

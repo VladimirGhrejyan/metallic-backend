@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const GetMeOutputDtoSchema = z
     .object({
         id: z.number(),
-        username: z.string(),
+        email: z.string(),
     })
     .strip();
 

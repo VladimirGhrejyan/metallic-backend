@@ -1,12 +1,12 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-import { passwordSchema, usernameSchema } from '../schema';
+import { emailSchema, passwordSchema } from '../schema';
 import { TAccessToken } from '../types';
 
 const SignInInputDtoSchema = z
     .object({
-        username: usernameSchema,
+        email: emailSchema,
 
         password: passwordSchema,
     })

@@ -3,11 +3,11 @@ import { z } from 'zod';
 
 import { TAccessToken } from '~modules/auth/common/types';
 
-import { passwordSchema, usernameSchema } from '../schema';
+import { emailSchema, passwordSchema } from '../schema';
 
 const SignUpInputDtoSchema = z
     .object({
-        username: usernameSchema,
+        email: emailSchema,
 
         password: passwordSchema,
     })

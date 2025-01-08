@@ -12,12 +12,12 @@ export class UsersRepository extends Repository<User> {
         super(usersRepository.target, usersRepository.manager, usersRepository.queryRunner);
     }
 
-    public async findOneByUsername(criteria: Pick<User, 'username'>): Promise<User | null> {
+    public async findOneByEmail(criteria: Pick<User, 'email'>): Promise<User | null> {
         return this.usersRepository.findOneBy(criteria);
     }
 
-    public async getOne(username: User['username']): Promise<User> {
-        const user = await this.usersRepository.findOne({ where: { username } });
+    public async getOne(email: User['email']): Promise<User> {
+        const user = await this.usersRepository.findOne({ where: { email: email } });
 
         if (!user) {
             throw new NotFoundException('User not found');
@@ -27,18 +27,16 @@ export class UsersRepository extends Repository<User> {
     }
 
     public async createOne(userPayload: SignUpInputDto): Promise<void> {
-        await this.checkUsernameUniquenessOrThrowException(userPayload.username);
+        await this.checkEmailUniquenessOrThrowException(userPayload.email);
 
         await this.usersRepository.insert(userPayload);
     }
 
-    private async checkUsernameUniquenessOrThrowException(
-        username: User['username'],
-    ): Promise<void> {
-        const existingUser = await this.findOneByUsername({ username });
+    private async checkEmailUniquenessOrThrowException(email: User['email']): Promise<void> {
+        const existingUser = await this.findOneByEmail({ email: email });
 
         if (existingUser) {
-            throw new ConflictException(`Username ${username} already exists`);
+            throw new ConflictException(`Email ${email} already in use`);
         }
     }
 }

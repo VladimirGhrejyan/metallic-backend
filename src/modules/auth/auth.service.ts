@@ -19,11 +19,8 @@ export class AuthService {
 
     private readonly SALT = 7;
 
-    public async validateUser(
-        username: User['username'],
-        password: User['password'],
-    ): Promise<User> {
-        const user: User | null = await this.usersRepository.findOneByUsername({ username });
+    public async validateUser(email: User['email'], password: User['password']): Promise<User> {
+        const user: User | null = await this.usersRepository.findOneByEmail({ email: email });
 
         if (!user) {
             throw new BadRequestException('User not found');
@@ -38,8 +35,8 @@ export class AuthService {
         return user;
     }
 
-    public async signIn(user: Pick<User, 'username' | 'password'>): Promise<TAccessToken> {
-        const payload = pick(user, ['id', 'username']);
+    public async signIn(user: Pick<User, 'email' | 'password'>): Promise<TAccessToken> {
+        const payload = pick(user, ['id', 'email']);
 
         return { access_token: this.jwtService.sign(payload) };
     }
@@ -47,7 +44,7 @@ export class AuthService {
     public async signUp(dto: SignUpInputDto): Promise<TAccessToken> {
         const hashedPassword = await bcrypt.hash(dto.password, this.SALT);
 
-        const newUser: Pick<User, 'username' | 'password'> = { ...dto, password: hashedPassword };
+        const newUser: Pick<User, 'email' | 'password'> = { ...dto, password: hashedPassword };
 
         await this.usersRepository.createOne(newUser);
 

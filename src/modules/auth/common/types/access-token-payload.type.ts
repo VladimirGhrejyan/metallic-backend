@@ -1,4 +1,4 @@
 export type TAccessTokenPayload = {
     userId: number;
-    username: string;
+    email: string;
 };

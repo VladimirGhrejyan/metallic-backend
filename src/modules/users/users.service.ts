@@ -7,8 +7,8 @@ import { UsersRepository } from './users.repository';
 export class UsersService {
     constructor(private readonly usersRepository: UsersRepository) {}
 
-    public async getMe(username: string): Promise<GetMeOutputDto> {
-        const user = await this.usersRepository.getOne(username);
+    public async getMe(email: string): Promise<GetMeOutputDto> {
+        const user = await this.usersRepository.getOne(email);
 
         const result = GetMeOutputDtoSchema.safeParse(user);
 
