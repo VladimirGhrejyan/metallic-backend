@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
+import { CryptoModule } from '~modules/crypto';
 import { CustomConfigService } from '~modules/custom-config';
 import { UsersModule } from '~modules/users';
 
@@ -10,6 +11,7 @@ import { JwtStrategy, LocalStrategy } from './strategy';
 
 @Module({
     imports: [
+        CryptoModule,
         UsersModule,
         JwtModule.registerAsync({
             inject: [CustomConfigService],

@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import pick from 'lodash.pick';
 
 import { User } from '~orm/entities';
 
+import { CryptoService } from '~modules/crypto';
 import { UsersRepository } from '~modules/users';
+import { UtilsService } from '~modules/utils';
 
 import { SignUpInputDto } from './common/dto';
 import { TAccessToken } from './common/types';
@@ -15,6 +15,8 @@ export class AuthService {
     constructor(
         private usersRepository: UsersRepository,
         private jwtService: JwtService,
+        private utilsService: UtilsService,
+        private cryptoService: CryptoService,
     ) {}
 
     private readonly SALT = 7;
@@ -26,7 +28,7 @@ export class AuthService {
             throw new BadRequestException('User not found');
         }
 
-        const isMatch: boolean = bcrypt.compareSync(password, user.password);
+        const isMatch: boolean = this.cryptoService.compareSync(password, user.password);
 
         if (!isMatch) {
             throw new BadRequestException('Password does not match');
@@ -36,13 +38,13 @@ export class AuthService {
     }
 
     public async signIn(user: Pick<User, 'email' | 'password'>): Promise<TAccessToken> {
-        const payload = pick(user, ['id', 'email']);
+        const payload = this.utilsService.safePick(user, ['email', 'password']);
 
         return { access_token: this.jwtService.sign(payload) };
     }
 
     public async signUp(dto: SignUpInputDto): Promise<TAccessToken> {
-        const hashedPassword = await bcrypt.hash(dto.password, this.SALT);
+        const hashedPassword = await this.cryptoService.hash(dto.password, this.SALT);
 
         const newUser: Pick<User, 'email' | 'password'> = { ...dto, password: hashedPassword };
 

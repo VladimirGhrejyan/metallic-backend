@@ -21,11 +21,7 @@ async function bootstrap() {
     await createOpenApiDocument(app);
 
     await app.listen(PORT, () => {
-        console.log(
-            `Server started on port ${PORT ?? '3000'}`,
-            '-----',
-            `Environment: ${process.env.NODE_ENV}`,
-        );
+        console.log(`Server started on port ${PORT}`, `Environment: ${process.env.NODE_ENV}`);
     });
 }
 
