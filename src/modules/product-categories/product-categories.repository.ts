@@ -1,55 +1,61 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 import { ProductCategory } from '~orm/entities';
 
 import { CreateProductCategoryDto, UpdateProductCategoryDto } from './common/dto';
 
 @Injectable()
-export class ProductCategoriesRepository extends Repository<ProductCategory> {
+export class ProductCategoriesRepository {
     constructor(
         @InjectRepository(ProductCategory)
         private readonly productCategoryRepository: Repository<ProductCategory>,
-    ) {
-        super(
-            productCategoryRepository.target,
-            productCategoryRepository.manager,
-            productCategoryRepository.queryRunner,
-        );
-    }
+    ) {}
 
-    public async createOne(dto: CreateProductCategoryDto): Promise<void> {
+    public async createOne(dto: CreateProductCategoryDto, manager?: EntityManager): Promise<void> {
+        const repository = this.getRepository(manager);
+
         await Promise.all([
-            this.checkPropertyUniquenessOrThrowException('title', dto.title),
-            this.checkPropertyUniquenessOrThrowException('code', dto.code),
+            this.checkPropertyUniquenessOrThrowException('title', dto.title, null, manager),
+            this.checkPropertyUniquenessOrThrowException('code', dto.code, null, manager),
         ]);
 
-        await this.productCategoryRepository.insert(dto);
+        await repository.insert(dto);
     }
 
     public async updateOne(
         id: ProductCategory['id'],
         dto: UpdateProductCategoryDto,
+        manager?: EntityManager,
     ): Promise<void> {
-        const existingCategory = await this.getCategoryOrThrowException(id);
+        const existingCategory = await this.getCategoryOrThrowException(id, manager);
+
+        const repository = this.getRepository(manager);
 
         await Promise.all([
-            this.checkPropertyUniquenessOrThrowException('title', dto.title, id),
-            this.checkPropertyUniquenessOrThrowException('code', dto.code, id),
+            this.checkPropertyUniquenessOrThrowException('title', dto.title, id, manager),
+            this.checkPropertyUniquenessOrThrowException('code', dto.code, id, manager),
         ]);
 
-        await this.productCategoryRepository.update({ id }, { ...existingCategory, ...dto });
+        await repository.update({ id }, { ...existingCategory, ...dto });
     }
 
-    public async deleteOne(id: ProductCategory['id']): Promise<void> {
-        await this.getCategoryOrThrowException(id);
+    public async deleteOne(id: ProductCategory['id'], manager?: EntityManager): Promise<void> {
+        await this.getCategoryOrThrowException(id, manager);
 
-        await this.productCategoryRepository.softDelete(id);
+        const repository = this.getRepository(manager);
+
+        await repository.softDelete(id);
     }
 
-    public async getCategoryOrThrowException(id: ProductCategory['id']): Promise<ProductCategory> {
-        const category = await this.productCategoryRepository.findOneBy({ id });
+    public async getCategoryOrThrowException(
+        id: ProductCategory['id'],
+        manager?: EntityManager,
+    ): Promise<ProductCategory> {
+        const repository = this.getRepository(manager);
+
+        const category = await repository.findOneBy({ id });
 
         if (!category) {
             throw new NotFoundException('Category not found');
@@ -60,17 +66,28 @@ export class ProductCategoriesRepository extends Repository<ProductCategory> {
 
     private async checkPropertyUniquenessOrThrowException<
         K extends keyof Pick<ProductCategory, 'title' | 'code'>,
-    >(property: K, value?: ProductCategory[K], id?: ProductCategory['id']): Promise<void> {
+    >(
+        property: K,
+        value?: ProductCategory[K] | null,
+        id?: ProductCategory['id'] | null,
+        manager?: EntityManager,
+    ): Promise<void> {
         if (!value) {
             return;
         }
 
-        const existingCategory = await this.productCategoryRepository.findOneBy({
+        const repository = this.getRepository(manager);
+
+        const existingCategory = await repository.findOneBy({
             [property]: value,
         });
 
         if (existingCategory && existingCategory.id !== id) {
             throw new ConflictException(`Category with ${property} ${value} already exists`);
         }
+    }
+
+    private getRepository(manager?: EntityManager): Repository<ProductCategory> {
+        return manager ? manager.getRepository(ProductCategory) : this.productCategoryRepository;
     }
 }

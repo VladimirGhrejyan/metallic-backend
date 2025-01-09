@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 import { Product } from '~orm/entities';
 
@@ -9,58 +9,65 @@ import { ProductCategoriesRepository } from '~modules/product-categories';
 import { CreateProductDto, UpdateProductDto } from './common/dto';
 
 @Injectable()
-export class ProductsRepository extends Repository<Product> {
+export class ProductsRepository {
     constructor(
         @InjectRepository(Product) private readonly productsRepository: Repository<Product>,
 
         private readonly categoriesRepository: ProductCategoriesRepository,
-    ) {
-        super(
-            productsRepository.target,
-            productsRepository.manager,
-            productsRepository.queryRunner,
-        );
-    }
+    ) {}
 
-    public async createOne(dto: CreateProductDto): Promise<void> {
+    public async createOne(dto: CreateProductDto, manager?: EntityManager): Promise<void> {
         await Promise.all([
-            this.checkPropertyUniquenessOrThrowException('code', dto.code),
-            this.categoriesRepository.getCategoryOrThrowException(dto.categoryId),
+            this.checkPropertyUniquenessOrThrowException('code', dto.code, null, manager),
+            this.categoriesRepository.getCategoryOrThrowException(dto.categoryId, manager),
         ]);
 
-        await this.productsRepository.insert(dto);
+        const repository = this.getRepository(manager);
+
+        await repository.insert(dto);
     }
 
-    public async updateOne(id: Product['id'], dto: UpdateProductDto): Promise<void> {
-        const existingProduct = await this.getProductOrThrowException(id);
+    public async updateOne(
+        id: Product['id'],
+        dto: UpdateProductDto,
+        manager?: EntityManager,
+    ): Promise<void> {
+        const existingProduct = await this.getProductOrThrowException(id, manager);
 
         if (dto.code && dto.code !== existingProduct.code) {
-            await this.checkPropertyUniquenessOrThrowException('code', dto.code, id);
+            await this.checkPropertyUniquenessOrThrowException('code', dto.code, id, manager);
         }
 
         if (dto.categoryId && dto.categoryId !== existingProduct.categoryId) {
-            await this.categoriesRepository.getCategoryOrThrowException(dto.categoryId);
+            await this.categoriesRepository.getCategoryOrThrowException(dto.categoryId, manager);
         }
 
-        await this.productsRepository.update({ id }, { ...existingProduct, ...dto });
+        const repository = this.getRepository(manager);
+
+        await repository.update({ id }, { ...existingProduct, ...dto });
     }
 
-    public async deleteOne(id: Product['id']): Promise<void> {
-        await this.getProductOrThrowException(id);
+    public async deleteOne(id: Product['id'], manager?: EntityManager): Promise<void> {
+        await this.getProductOrThrowException(id, manager);
 
-        await this.productsRepository.softDelete(id);
+        const repository = this.getRepository(manager);
+
+        await repository.softDelete(id);
     }
 
     private async checkPropertyUniquenessOrThrowException<K extends keyof Pick<Product, 'code'>>(
         property: K,
-        value?: Product[K],
-        id?: Product['id'],
+        value?: Product[K] | null,
+        id?: Product['id'] | null,
+        manager?: EntityManager,
     ): Promise<void> {
         if (!value) {
             return;
         }
 
-        const existingProduct = await this.productsRepository.findOneBy({
+        const repository = this.getRepository(manager);
+
+        const existingProduct = await repository.findOneBy({
             [property]: value,
         });
 
@@ -69,13 +76,22 @@ export class ProductsRepository extends Repository<Product> {
         }
     }
 
-    private async getProductOrThrowException(id: Product['id']): Promise<Product> {
-        const product = await this.productsRepository.findOneBy({ id });
+    private async getProductOrThrowException(
+        id: Product['id'],
+        manager?: EntityManager,
+    ): Promise<Product> {
+        const repository = this.getRepository(manager);
+
+        const product = await repository.findOneBy({ id });
 
         if (!product) {
             throw new NotFoundException('Product not found');
         }
 
         return product;
+    }
+
+    private getRepository(manager?: EntityManager): Repository<Product> {
+        return manager ? manager.getRepository(Product) : this.productsRepository;
     }
 }
