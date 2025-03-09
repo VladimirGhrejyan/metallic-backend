@@ -18,6 +18,10 @@ async function bootstrap() {
 
     app.useGlobalPipes(new ZodValidationPipe());
 
+    app.enableCors({
+        origin: '*',
+    });
+
     await createOpenApiDocument(app);
 
     await app.listen(PORT, () => {

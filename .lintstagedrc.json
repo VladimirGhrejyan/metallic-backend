@@ -1,4 +1,4 @@
 {
-    "*.{js,ts,md,json}": ["pnpm format", "git add"],
-    "*.{ts,tsx}": ["pnpm lint"]
+    "*.{js,ts,md,json}": ["npm run format", "git add"],
+    "*.{ts,tsx}": ["npm run lint"]
 }

@@ -29,6 +29,6 @@ module.exports = [
     ...compat.extends('plugin:@typescript-eslint/recommended'),
     ...compat.extends('plugin:prettier/recommended'),
     {
-        ignores: ['eslint.config.js', 'commitlint.config.ts'],
+        ignores: ['scripts/**', 'eslint.config.js', 'commitlint.config.ts'],
     },
 ];
