@@ -23,7 +23,13 @@ const checkFileName = (name) => {
 };
 
 const runTypeORMCliCommand = (action, fileName) => {
-    const args = ['-d', DATA_SOURCE_PATH, `migration:${action}`];
+    const dataSourceArgs = ['-d', DATA_SOURCE_PATH];
+
+    const args = [`migration:${action}`];
+
+    if (action !== ACTION_TYPES.CREATE) {
+        args.push(...dataSourceArgs);
+    }
 
     if (fileName) {
         const migrationPath = join(ROOT_DIR, MIGRATIONS_PATH_FROM_ROOT_DIR, fileName);
