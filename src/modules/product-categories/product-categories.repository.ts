@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, FindManyOptions, Repository } from 'typeorm';
 
 import { ProductCategory } from '~orm/entities';
 
@@ -46,7 +46,7 @@ export class ProductCategoriesRepository {
 
         const repository = this.getRepository(manager);
 
-        await repository.softDelete(id);
+        await repository.delete(id);
     }
 
     public async getCategoryOrThrowException(
@@ -62,6 +62,21 @@ export class ProductCategoriesRepository {
         }
 
         return category;
+    }
+
+    public async getAllCategories(
+        options?: FindManyOptions<ProductCategory>,
+        manager?: EntityManager,
+    ): Promise<ProductCategory[]> {
+        const repository = this.getRepository(manager);
+
+        const categories = await repository.find(options);
+
+        if (!categories) {
+            throw new NotFoundException('Categories not found');
+        }
+
+        return categories;
     }
 
     private async checkPropertyUniquenessOrThrowException<

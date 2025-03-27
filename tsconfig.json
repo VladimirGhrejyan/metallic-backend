@@ -22,7 +22,8 @@
             "~modules/*": ["src/modules/*"],
             "~orm/*": ["src/orm/*"],
             "~common/*": ["src/common/*"],
-            "~config/*": ["src/config/*"]
+            "~config/*": ["src/config/*"],
+            "~app/*": ["src/app/*"]
         }
     }
 }

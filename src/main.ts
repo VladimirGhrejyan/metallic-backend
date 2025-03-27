@@ -1,13 +1,11 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { AppModule } from '~app/app.module';
+import { ZodValidationPipe } from '~app/pipes';
 
 import { createOpenApiDocument } from '~config/open-api';
 
-import { CustomConfigService } from '~modules/custom-config/custom-config.service';
-
-import { ZodValidationPipe } from '~common/pipes';
-
-import { AppModule } from './app.module';
+import { CustomConfigService } from '~modules/custom-config';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);

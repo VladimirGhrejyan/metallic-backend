@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { CreateProductCategoryDto, UpdateProductCategoryDto } from './common/dto';
+import { TProductCategoriesResponse } from './common/types';
 import { ProductCategoriesRepository } from './product-categories.repository';
 
 @Injectable()
@@ -17,5 +18,13 @@ export class ProductCategoriesService {
 
     public async deleteOne(id: number): Promise<void> {
         return this.productCategoriesRepository.deleteOne(id);
+    }
+
+    public async getAll(): Promise<TProductCategoriesResponse> {
+        const categories = await this.productCategoriesRepository.getAllCategories();
+
+        return {
+            items: categories,
+        };
     }
 }

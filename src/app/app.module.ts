@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ZodSerializerInterceptor } from 'nestjs-zod';
 import * as path from 'path';
 
 import { STATIC_DIR_NAME } from '~config/common/constants';
@@ -18,6 +19,7 @@ import { UtilsModule } from '~modules/utils';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ExceptionFilter } from './filters';
 
 @Module({
     imports: [
@@ -54,6 +56,16 @@ import { AppService } from './app.service';
         },
 
         JwtStrategy,
+
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: ZodSerializerInterceptor,
+        },
+
+        {
+            provide: APP_FILTER,
+            useClass: ExceptionFilter,
+        },
     ],
 })
 export class AppModule {}

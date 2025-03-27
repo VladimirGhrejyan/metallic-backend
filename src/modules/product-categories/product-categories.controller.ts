@@ -1,7 +1,14 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ZodSerializerDto } from 'nestjs-zod';
 
-import { CreateProductCategoryDto, UpdateProductCategoryDto } from './common/dto';
+import {
+    CreateProductCategoryDto,
+    GetAllCategoriesDto,
+    GetAllCategoriesDtoSchema,
+    UpdateProductCategoryDto,
+} from './common/dto';
+import { TProductCategoriesResponse } from './common/types';
 import { ProductCategoriesService } from './product-categories.service';
 
 @ApiBearerAuth()
@@ -29,5 +36,13 @@ export class ProductCategoriesController {
     @ApiOperation({ operationId: 'deleteProductCategory' })
     public async deleteOne(@Param('id', ParseIntPipe) id: number): Promise<void> {
         return this.productCategoriesService.deleteOne(id);
+    }
+
+    @Get('all')
+    @ApiOperation({ operationId: 'getProductCategories' })
+    @ZodSerializerDto(GetAllCategoriesDtoSchema)
+    @ApiOkResponse({ type: GetAllCategoriesDto })
+    public async getAll(): Promise<TProductCategoriesResponse> {
+        return this.productCategoriesService.getAll();
     }
 }

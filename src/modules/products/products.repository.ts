@@ -52,7 +52,7 @@ export class ProductsRepository {
 
         const repository = this.getRepository(manager);
 
-        await repository.softDelete(id);
+        await repository.delete(id);
     }
 
     private async checkPropertyUniquenessOrThrowException<K extends keyof Pick<Product, 'code'>>(
