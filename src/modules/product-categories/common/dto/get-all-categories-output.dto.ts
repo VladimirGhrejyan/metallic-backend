@@ -7,4 +7,4 @@ export const GetAllCategoriesDtoSchema = z.object({
     items: z.array(GetOneCategoryDtoSchema),
 });
 
-export class GetAllCategoriesDto extends createZodDto(GetAllCategoriesDtoSchema) {}
+export class GetAllCategoriesOutputDto extends createZodDto(GetAllCategoriesDtoSchema) {}

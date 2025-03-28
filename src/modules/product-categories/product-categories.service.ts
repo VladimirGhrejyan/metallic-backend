@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateProductCategoryDto, UpdateProductCategoryDto } from './common/dto';
+import {
+    CreateProductCategoryDto,
+    GetAllCategoriesInputDto,
+    UpdateProductCategoryDto,
+} from './common/dto';
 import { TProductCategoriesResponse } from './common/types';
 import { ProductCategoriesRepository } from './product-categories.repository';
 
@@ -20,8 +24,8 @@ export class ProductCategoriesService {
         return this.productCategoriesRepository.deleteOne(id);
     }
 
-    public async getAll(): Promise<TProductCategoriesResponse> {
-        const categories = await this.productCategoriesRepository.getAllCategories();
+    public async getAll(criteria: GetAllCategoriesInputDto): Promise<TProductCategoriesResponse> {
+        const categories = await this.productCategoriesRepository.getAllCategories(criteria);
 
         return {
             items: categories,

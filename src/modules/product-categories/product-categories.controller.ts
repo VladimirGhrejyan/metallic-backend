@@ -1,11 +1,25 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ZodSerializerDto } from 'nestjs-zod';
 
+import { ZodApiQuery } from '~common/decorators';
+
 import {
     CreateProductCategoryDto,
-    GetAllCategoriesDto,
     GetAllCategoriesDtoSchema,
+    GetAllCategoriesInputDto,
+    GetAllCategoriesInputDtoSchema,
+    GetAllCategoriesOutputDto,
     UpdateProductCategoryDto,
 } from './common/dto';
 import { TProductCategoriesResponse } from './common/types';
@@ -16,6 +30,17 @@ import { ProductCategoriesService } from './product-categories.service';
 @Controller('product-categories')
 export class ProductCategoriesController {
     constructor(private readonly productCategoriesService: ProductCategoriesService) {}
+
+    @Get('all')
+    @ApiOperation({ operationId: 'getProductCategories' })
+    @ZodApiQuery(GetAllCategoriesInputDtoSchema)
+    @ZodSerializerDto(GetAllCategoriesDtoSchema)
+    @ApiOkResponse({ type: GetAllCategoriesOutputDto })
+    public async getAll(
+        @Query() query: GetAllCategoriesInputDto,
+    ): Promise<TProductCategoriesResponse> {
+        return this.productCategoriesService.getAll(query);
+    }
 
     @Post()
     @ApiOperation({ operationId: 'createProductCategory' })
@@ -36,13 +61,5 @@ export class ProductCategoriesController {
     @ApiOperation({ operationId: 'deleteProductCategory' })
     public async deleteOne(@Param('id', ParseIntPipe) id: number): Promise<void> {
         return this.productCategoriesService.deleteOne(id);
-    }
-
-    @Get('all')
-    @ApiOperation({ operationId: 'getProductCategories' })
-    @ZodSerializerDto(GetAllCategoriesDtoSchema)
-    @ApiOkResponse({ type: GetAllCategoriesDto })
-    public async getAll(): Promise<TProductCategoriesResponse> {
-        return this.productCategoriesService.getAll();
     }
 }

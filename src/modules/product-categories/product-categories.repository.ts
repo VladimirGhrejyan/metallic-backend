@@ -1,10 +1,14 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, FindManyOptions, Repository } from 'typeorm';
+import { EntityManager, FindManyOptions, ILike, Repository } from 'typeorm';
 
 import { ProductCategory } from '~orm/entities';
 
-import { CreateProductCategoryDto, UpdateProductCategoryDto } from './common/dto';
+import {
+    CreateProductCategoryDto,
+    GetAllCategoriesInputDto,
+    UpdateProductCategoryDto,
+} from './common/dto';
 
 @Injectable()
 export class ProductCategoriesRepository {
@@ -65,18 +69,31 @@ export class ProductCategoriesRepository {
     }
 
     public async getAllCategories(
-        options?: FindManyOptions<ProductCategory>,
+        criteria: GetAllCategoriesInputDto,
         manager?: EntityManager,
     ): Promise<ProductCategory[]> {
         const repository = this.getRepository(manager);
 
-        const categories = await repository.find(options);
+        const categories = await repository.find(this.buildFindOptions(criteria));
 
         if (!categories) {
             throw new NotFoundException('Categories not found');
         }
 
         return categories;
+    }
+
+    private buildFindOptions(criteria: GetAllCategoriesInputDto): FindManyOptions<ProductCategory> {
+        const options: FindManyOptions<ProductCategory> = {};
+
+        if (criteria?.search) {
+            options.where = [
+                { title: ILike(`%${criteria.search}%`) },
+                { code: ILike(`%${criteria.search}%`) },
+            ];
+        }
+
+        return options;
     }
 
     private async checkPropertyUniquenessOrThrowException<
