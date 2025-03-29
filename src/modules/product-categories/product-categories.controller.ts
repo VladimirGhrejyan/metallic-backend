@@ -14,6 +14,7 @@ import { ZodSerializerDto } from 'nestjs-zod';
 
 import { ZodApiQuery } from '~common/decorators';
 
+import { PRODUCT_CATEGORIES_METADATA } from './common/constants';
 import {
     CreateProductCategoryDto,
     GetAllCategoriesDtoSchema,
@@ -25,14 +26,20 @@ import {
 import { TProductCategoriesResponse } from './common/types';
 import { ProductCategoriesService } from './product-categories.service';
 
+const {
+    PREFIX,
+    TAGS,
+    ROUTES: { GET_ALL, CREATE_ONE, UPDATE_ONE, DELETE_ONE },
+} = PRODUCT_CATEGORIES_METADATA;
+
 @ApiBearerAuth()
-@ApiTags('product-categories')
-@Controller('product-categories')
+@ApiTags(...TAGS)
+@Controller(PREFIX)
 export class ProductCategoriesController {
     constructor(private readonly productCategoriesService: ProductCategoriesService) {}
 
-    @Get('all')
-    @ApiOperation({ operationId: 'getProductCategories' })
+    @Get(GET_ALL.PATH)
+    @ApiOperation({ operationId: GET_ALL.OPERATION_ID })
     @ZodApiQuery(GetAllCategoriesInputDtoSchema)
     @ZodSerializerDto(GetAllCategoriesDtoSchema)
     @ApiOkResponse({ type: GetAllCategoriesOutputDto })
@@ -42,24 +49,24 @@ export class ProductCategoriesController {
         return this.productCategoriesService.getAll(query);
     }
 
-    @Post()
-    @ApiOperation({ operationId: 'createProductCategory' })
+    @Post(CREATE_ONE.PATH)
+    @ApiOperation({ operationId: CREATE_ONE.OPERATION_ID })
     public async createOne(@Body() dto: CreateProductCategoryDto): Promise<void> {
         return this.productCategoriesService.createOne(dto);
     }
 
-    @Patch(':id')
-    @ApiOperation({ operationId: 'updateProductCategory' })
+    @Patch(UPDATE_ONE.PATH)
+    @ApiOperation({ operationId: UPDATE_ONE.OPERATION_ID })
     public async updateOne(
-        @Param('id', ParseIntPipe) id: number,
+        @Param(UPDATE_ONE.PARAMS.ID, ParseIntPipe) id: number,
         @Body() dto: UpdateProductCategoryDto,
     ): Promise<void> {
         return this.productCategoriesService.updateOne(id, dto);
     }
 
-    @Delete(':id')
-    @ApiOperation({ operationId: 'deleteProductCategory' })
-    public async deleteOne(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    @Delete(DELETE_ONE.PATH)
+    @ApiOperation({ operationId: DELETE_ONE.OPERATION_ID })
+    public async deleteOne(@Param(DELETE_ONE.PARAMS.ID, ParseIntPipe) id: number): Promise<void> {
         return this.productCategoriesService.deleteOne(id);
     }
 }
