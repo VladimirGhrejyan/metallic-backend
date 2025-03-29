@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ZodSerializerInterceptor } from 'nestjs-zod';
+import * as process from 'node:process';
 import * as path from 'path';
 
 import { STATIC_DIR_NAME } from '~config/common/constants';
@@ -30,7 +31,7 @@ import { ExceptionFilter } from './filters';
         CryptoModule,
 
         ServeStaticModule.forRoot({
-            rootPath: path.join(__dirname, '..', '..', STATIC_DIR_NAME),
+            rootPath: path.join(process.cwd(), STATIC_DIR_NAME),
             serveRoot: '/' + STATIC_DIR_NAME,
         }),
 

@@ -1,12 +1,16 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, FindManyOptions, ILike, Repository } from 'typeorm';
 
 import { Product } from '~orm/entities';
 
 import { ProductCategoriesRepository } from '~modules/product-categories';
+import { UtilsService } from '~modules/utils';
 
-import { CreateProductDto, UpdateProductDto } from './common/dto';
+import { PaginationHelper } from '~common/helpers/pagination';
+import { IPaginationResult } from '~common/interfaces';
+
+import { CreateProductDto, GetAllProductsInputDto, UpdateProductDto } from './common/dto';
 
 @Injectable()
 export class ProductsRepository {
@@ -14,7 +18,56 @@ export class ProductsRepository {
         @InjectRepository(Product) private readonly productsRepository: Repository<Product>,
 
         private readonly categoriesRepository: ProductCategoriesRepository,
+
+        private readonly utilsService: UtilsService,
     ) {}
+
+    SEARCHABLE_FIELDS: Array<keyof Product> = ['code', 'title'];
+
+    public async getAll(
+        criteria: GetAllProductsInputDto,
+        manager?: EntityManager,
+    ): Promise<IPaginationResult<Product>> {
+        const repository = this.getRepository(manager);
+
+        return PaginationHelper.paginate<Product>(
+            repository,
+            this.utilsService.safePick(criteria, ['itemsPerPage', 'page']),
+            this.buildGetAllQueryOptions(criteria),
+        );
+    }
+
+    private buildGetAllQueryOptions(criteria: GetAllProductsInputDto): FindManyOptions<Product> {
+        const options = {
+            order: {
+                [criteria.sortBy]: criteria.order,
+            },
+            where: this.buildWhereConditionForGetAll(
+                this.utilsService.safePick(criteria, ['categoryId', 'search']),
+            ),
+        };
+
+        return options;
+    }
+
+    private buildWhereConditionForGetAll(
+        criteria: Pick<GetAllProductsInputDto, 'categoryId' | 'search'>,
+    ): FindManyOptions<Product>['where'] {
+        const { categoryId, search } = criteria;
+
+        if (!categoryId && !search) {
+            return {};
+        }
+
+        if (!search) {
+            return { categoryId };
+        }
+
+        return this.SEARCHABLE_FIELDS.map((key) => ({
+            [key]: ILike(`%${search}%`),
+            ...(!!categoryId && { categoryId }),
+        }));
+    }
 
     public async createOne(dto: CreateProductDto, manager?: EntityManager): Promise<void> {
         await Promise.all([

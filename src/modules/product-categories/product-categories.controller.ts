@@ -12,6 +12,8 @@ import {
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ZodSerializerDto } from 'nestjs-zod';
 
+import { SkipAuth } from '~modules/auth/decorators';
+
 import { ZodApiQuery } from '~common/decorators';
 
 import { PRODUCT_CATEGORIES_METADATA } from './common/constants';
@@ -38,6 +40,7 @@ const {
 export class ProductCategoriesController {
     constructor(private readonly productCategoriesService: ProductCategoriesService) {}
 
+    @SkipAuth()
     @Get(GET_ALL.PATH)
     @ApiOperation({ operationId: GET_ALL.OPERATION_ID })
     @ZodApiQuery(GetAllCategoriesInputDtoSchema)
