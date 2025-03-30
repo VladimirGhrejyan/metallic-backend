@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
+import { ProductCategory } from '~orm/entities';
+
 import {
     CreateProductCategoryDto,
     GetAllCategoriesInputDto,
@@ -30,5 +32,9 @@ export class ProductCategoriesService {
         return {
             items: categories,
         };
+    }
+
+    public async getOneById(id: ProductCategory['id']): Promise<ProductCategory> {
+        return this.productCategoriesRepository.getCategoryOrThrowException(id);
     }
 }

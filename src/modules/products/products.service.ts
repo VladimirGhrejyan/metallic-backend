@@ -15,6 +15,10 @@ export class ProductsService {
         return this.productsRepository.getAll(criteria);
     }
 
+    public async getOneById(id: Product['id']): Promise<Product> {
+        return this.productsRepository.getProductOrThrowException(id);
+    }
+
     public async createOne(dto: CreateProductDto): Promise<void> {
         return this.productsRepository.createOne(dto);
     }

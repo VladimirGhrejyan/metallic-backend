@@ -1,19 +1,19 @@
 import { IApiMetadata } from '~common/interfaces';
 
-export const PRODUCT_CATEGORIES_METADATA = {
-    TAGS: ['product-categories'],
+export const PRODUCTS_METADATA = {
+    TAGS: ['products'],
 
-    PREFIX: 'product-categories',
+    PREFIX: 'products',
 
     ROUTES: {
         GET_ALL: {
-            PATH: 'all',
-            OPERATION_ID: 'getProductCategories',
+            PATH: '',
+            OPERATION_ID: 'getProducts',
         },
 
         GET_ONE: {
             PATH: ':id',
-            OPERATION_ID: 'getProductCategoryById',
+            OPERATION_ID: 'getProductById',
             PARAMS: {
                 ID: 'id',
             },
@@ -21,12 +21,12 @@ export const PRODUCT_CATEGORIES_METADATA = {
 
         CREATE_ONE: {
             PATH: '',
-            OPERATION_ID: 'createProductCategory',
+            OPERATION_ID: 'createProduct',
         },
 
         UPDATE_ONE: {
             PATH: ':id',
-            OPERATION_ID: 'updateProductCategory',
+            OPERATION_ID: 'updateProduct',
             PARAMS: {
                 ID: 'id',
             },
@@ -34,7 +34,7 @@ export const PRODUCT_CATEGORIES_METADATA = {
 
         DELETE_ONE: {
             PATH: ':id',
-            OPERATION_ID: 'deleteProductCategory',
+            OPERATION_ID: 'deleteProduct',
             PARAMS: {
                 ID: 'id',
             },

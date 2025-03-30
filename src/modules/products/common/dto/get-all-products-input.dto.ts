@@ -3,16 +3,19 @@ import { z } from 'zod';
 
 import { OrderEnum } from '~common/enums';
 import { PaginationInputSchema } from '~common/helpers/pagination';
-import { OrderSchema } from '~common/schemas';
+import { OrderSchema, parseIntegerSchema } from '~common/schemas';
 
 export const GetAllProductsInputDtoSchema = z
     .object({
         search: z.string().optional(),
-        categoryId: z.number().optional(),
-        order: OrderSchema.default(OrderEnum.ASC),
+        order: OrderSchema.default(OrderEnum.DESC),
         sortBy: z
             .enum(['title', 'code', 'costPrice', 'categoryId', 'createdAt', 'updatedAt'])
             .default('createdAt'),
+        categoryId: parseIntegerSchema({
+            optional: true,
+            errorMessage: 'CategoryId should be positive integer',
+        }),
     })
     .merge(PaginationInputSchema);
 

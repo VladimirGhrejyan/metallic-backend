@@ -12,7 +12,7 @@ import {
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ZodSerializerDto } from 'nestjs-zod';
 
-import { SkipAuth } from '~modules/auth/decorators';
+import { ProductCategory } from '~orm/entities';
 
 import { ZodApiQuery } from '~common/decorators';
 
@@ -23,6 +23,8 @@ import {
     GetAllCategoriesInputDto,
     GetAllCategoriesInputDtoSchema,
     GetAllCategoriesOutputDto,
+    GetOneCategoryDto,
+    GetOneCategoryDtoSchema,
     UpdateProductCategoryDto,
 } from './common/dto';
 import { TProductCategoriesResponse } from './common/types';
@@ -31,7 +33,7 @@ import { ProductCategoriesService } from './product-categories.service';
 const {
     PREFIX,
     TAGS,
-    ROUTES: { GET_ALL, CREATE_ONE, UPDATE_ONE, DELETE_ONE },
+    ROUTES: { GET_ALL, GET_ONE, CREATE_ONE, UPDATE_ONE, DELETE_ONE },
 } = PRODUCT_CATEGORIES_METADATA;
 
 @ApiBearerAuth()
@@ -40,7 +42,6 @@ const {
 export class ProductCategoriesController {
     constructor(private readonly productCategoriesService: ProductCategoriesService) {}
 
-    @SkipAuth()
     @Get(GET_ALL.PATH)
     @ApiOperation({ operationId: GET_ALL.OPERATION_ID })
     @ZodApiQuery(GetAllCategoriesInputDtoSchema)
@@ -50,6 +51,16 @@ export class ProductCategoriesController {
         @Query() query: GetAllCategoriesInputDto,
     ): Promise<TProductCategoriesResponse> {
         return this.productCategoriesService.getAll(query);
+    }
+
+    @Get(GET_ONE.PATH)
+    @ApiOperation({ operationId: GET_ONE.OPERATION_ID })
+    @ZodSerializerDto(GetOneCategoryDtoSchema)
+    @ApiOkResponse({ type: GetOneCategoryDto })
+    public async getOneById(
+        @Param(GET_ONE.PARAMS.ID, ParseIntPipe) id: number,
+    ): Promise<ProductCategory> {
+        return this.productCategoriesService.getOneById(id);
     }
 
     @Post(CREATE_ONE.PATH)

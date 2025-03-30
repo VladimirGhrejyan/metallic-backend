@@ -1,3 +1,4 @@
+import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 import { baseEntitySchema } from '~common/schemas';
@@ -11,3 +12,5 @@ export const GetOneCategoryDtoSchema = z
     })
     .merge(baseEntitySchema)
     .strip();
+
+export class GetOneCategoryDto extends createZodDto(GetOneCategoryDtoSchema) {}

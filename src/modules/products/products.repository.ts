@@ -129,7 +129,7 @@ export class ProductsRepository {
         }
     }
 
-    private async getProductOrThrowException(
+    public async getProductOrThrowException(
         id: Product['id'],
         manager?: EntityManager,
     ): Promise<Product> {

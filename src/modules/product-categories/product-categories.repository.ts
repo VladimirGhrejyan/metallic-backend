@@ -17,6 +17,8 @@ export class ProductCategoriesRepository {
         private readonly productCategoryRepository: Repository<ProductCategory>,
     ) {}
 
+    SEARCHABLE_FIELDS: Array<keyof ProductCategory> = ['code', 'title'];
+
     public async createOne(dto: CreateProductCategoryDto, manager?: EntityManager): Promise<void> {
         const repository = this.getRepository(manager);
 
@@ -84,13 +86,16 @@ export class ProductCategoriesRepository {
     }
 
     private buildFindOptions(criteria: GetAllCategoriesInputDto): FindManyOptions<ProductCategory> {
-        const options: FindManyOptions<ProductCategory> = {};
+        const options: FindManyOptions<ProductCategory> = {
+            order: {
+                [criteria.sortBy]: criteria.order,
+            },
+        };
 
         if (criteria?.search) {
-            options.where = [
-                { title: ILike(`%${criteria.search}%`) },
-                { code: ILike(`%${criteria.search}%`) },
-            ];
+            options.where = this.SEARCHABLE_FIELDS.map((key) => ({
+                [key]: ILike(`%${criteria.search}%`),
+            }));
         }
 
         return options;
