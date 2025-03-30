@@ -9,4 +9,5 @@ export const storageConfigLoader = registerAs<TGlobalConfig['storage']>(configKe
     region: getEnvVar('STORAGE_REGION'),
     accessKeyId: getEnvVar('STORAGE_ACCESS_KEY_ID'),
     secretAccessKey: getEnvVar('STORAGE_SECRET_ACCESS_KEY'),
+    bucketName: getEnvVar('STORAGE_BUCKET_NAME'),
 }));

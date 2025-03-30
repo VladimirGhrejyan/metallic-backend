@@ -16,6 +16,7 @@ type AuthConfig = {
 type StorageConfig = {
     endpoint: TEnvironment['STORAGE_URL'];
     region: TEnvironment['STORAGE_REGION'];
+    bucketName: TEnvironment['STORAGE_BUCKET_NAME'];
     accessKeyId: TEnvironment['STORAGE_ACCESS_KEY_ID'];
     secretAccessKey: TEnvironment['STORAGE_SECRET_ACCESS_KEY'];
 };
