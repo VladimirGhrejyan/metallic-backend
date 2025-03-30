@@ -13,6 +13,7 @@ import { JwtStrategy } from '~modules/auth/strategy';
 import { CryptoModule } from '~modules/crypto';
 import { CustomConfigModule } from '~modules/custom-config';
 import { DatabaseModule } from '~modules/database';
+import { PersistentStorageModule } from '~modules/persistent-storage';
 import { ProductCategoriesModule } from '~modules/product-categories';
 import { ProductsModule } from '~modules/products';
 import { UsersModule } from '~modules/users';
@@ -36,6 +37,8 @@ import { ExceptionFilter } from './filters';
         }),
 
         DatabaseModule,
+
+        PersistentStorageModule,
 
         AuthModule,
 

@@ -16,4 +16,10 @@ export const envSchema = z.object({
     // AUTH
     JWT_SECRET: z.string(),
     JWT_ACCESS_EXPIRES_IN: z.string(),
+
+    // STORAGE
+    STORAGE_URL: z.string(),
+    STORAGE_REGION: z.string(),
+    STORAGE_ACCESS_KEY_ID: z.string(),
+    STORAGE_SECRET_ACCESS_KEY: z.string(),
 });
