@@ -4,7 +4,7 @@ import { EntityManager, Repository } from 'typeorm';
 
 import { User } from '~orm/entities';
 
-import { SignUpInputDto } from '~modules/auth/common/dto';
+import { SignUpInputDto } from '~modules/api/auth/common/dto';
 
 @Injectable()
 export class UsersRepository {

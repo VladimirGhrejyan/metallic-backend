@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { SkipAuth } from '~modules/auth/decorators';
+import { SkipAuth } from '~modules/api/auth/decorators';
 
 import { AuthService } from './auth.service';
 import { SignInInputDto, SignInOutputDto, SignUpInputDto, SignUpOutputDto } from './common/dto';

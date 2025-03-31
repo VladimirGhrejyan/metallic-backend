@@ -1,7 +1,7 @@
 import { Controller, Get, Request } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { TAuthenticatedRequest } from '~modules/auth/common/types';
+import { TAuthenticatedRequest } from '~modules/api/auth/common/types';
 
 import { GetMeOutputDto } from './common/dto';
 import { UsersService } from './users.service';

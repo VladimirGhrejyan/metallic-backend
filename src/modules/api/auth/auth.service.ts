@@ -3,8 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 
 import { User } from '~orm/entities';
 
+import { UsersRepository } from '~modules/api/users';
 import { CryptoService } from '~modules/crypto';
-import { UsersRepository } from '~modules/users';
 import { UtilsService } from '~modules/utils';
 
 import { SignUpInputDto } from './common/dto';

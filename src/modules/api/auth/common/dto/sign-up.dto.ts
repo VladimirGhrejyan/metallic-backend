@@ -1,7 +1,7 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-import { TAccessToken } from '~modules/auth/common/types';
+import { TAccessToken } from '~modules/api/auth/common/types';
 
 import { emailSchema, passwordSchema } from '../schema';
 
