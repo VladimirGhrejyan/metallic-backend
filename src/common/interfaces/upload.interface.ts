@@ -1,7 +1,7 @@
 export interface IUpload {
     id: number;
 
-    title: string;
+    name: string;
 
     path: string;
 

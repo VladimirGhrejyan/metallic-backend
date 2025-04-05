@@ -8,8 +8,18 @@ import {
     Patch,
     Post,
     Query,
+    UploadedFile,
+    UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+    ApiBearerAuth,
+    ApiBody,
+    ApiConsumes,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { ZodSerializerDto } from 'nestjs-zod';
 
 import { Product } from '~orm/entities';
@@ -17,7 +27,7 @@ import { Product } from '~orm/entities';
 import { ZodApiQuery } from '~common/decorators';
 import { IPaginationResult } from '~common/interfaces';
 
-import { PRODUCTS_METADATA } from './common/constants';
+import { IMAGE_KEY, PRODUCTS_METADATA, UPDATE_ONE_IMAGE_API_BODY } from './common/constants';
 import {
     CreateProductDto,
     GetAllProductsInputDto,
@@ -33,7 +43,7 @@ import { ProductsService } from './products.service';
 const {
     PREFIX,
     TAGS,
-    ROUTES: { GET_ALL, GET_ONE, CREATE_ONE, UPDATE_ONE, DELETE_ONE },
+    ROUTES: { GET_ALL, GET_ONE, CREATE_ONE, UPDATE_ONE, DELETE_ONE, UPDATE_ONE_IMAGE },
 } = PRODUCTS_METADATA;
 
 @ApiBearerAuth()
@@ -80,5 +90,17 @@ export class ProductsController {
     @ApiOperation({ operationId: DELETE_ONE.OPERATION_ID })
     public async deleteOne(@Param(DELETE_ONE.PARAMS.ID, ParseIntPipe) id: number): Promise<void> {
         return this.productsService.deleteOne(id);
+    }
+
+    @Patch(UPDATE_ONE_IMAGE.PATH)
+    @ApiOperation({ operationId: UPDATE_ONE_IMAGE.OPERATION_ID })
+    @ApiConsumes('multipart/form-data')
+    @ApiBody(UPDATE_ONE_IMAGE_API_BODY)
+    @UseInterceptors(FileInterceptor(IMAGE_KEY))
+    public async updateOneImage(
+        @Param(UPDATE_ONE_IMAGE.PARAMS.ID, ParseIntPipe) id: number,
+        @UploadedFile() image: Express.Multer.File,
+    ): Promise<void> {
+        return this.productsService.updateOneImage(id, image);
     }
 }

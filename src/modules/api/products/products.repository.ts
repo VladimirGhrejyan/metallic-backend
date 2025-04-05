@@ -2,7 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, FindManyOptions, ILike, Repository } from 'typeorm';
 
-import { Product } from '~orm/entities';
+import { Product, Upload } from '~orm/entities';
 
 import { ProductCategoriesRepository } from '~modules/api/product-categories';
 import { UtilsService } from '~modules/utils';
@@ -135,13 +135,17 @@ export class ProductsRepository {
     ): Promise<Product> {
         const repository = this.getRepository(manager);
 
-        const product = await repository.findOneBy({ id });
+        const product = await repository.findOne({ where: { id }, relations: ['category'] });
 
         if (!product) {
             throw new NotFoundException('Product not found');
         }
 
         return product;
+    }
+
+    public async updateOneImage(productId: Product['id'], imageId: Upload['id']): Promise<void> {
+        await this.productsRepository.update(productId, { imageId });
     }
 
     private getRepository(manager?: EntityManager): Repository<Product> {

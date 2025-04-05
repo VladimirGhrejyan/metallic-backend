@@ -1,9 +1,10 @@
-import { ObjectCannedACL, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { TGlobalConfig } from '~config/common/types';
 
 import { CustomConfigService } from '~modules/custom-config';
+import { TUploadFileOptions } from '~modules/persistent-storage/common/types';
 
 @Injectable()
 export class PersistentStorageService {
@@ -25,16 +26,16 @@ export class PersistentStorageService {
         });
     }
 
-    public async uploadFile(
-        fileBuffer: Buffer,
-        key: string,
-        acl: ObjectCannedACL = 'public-read',
-    ): Promise<string> {
+    public async uploadFile(fileBuffer: Buffer, options: TUploadFileOptions): Promise<string> {
+        const { key, contentType, acl = 'public-read', contentDisposition = 'inline' } = options;
+
         const command = new PutObjectCommand({
             Bucket: this.s3_config.bucketName,
             Key: key,
             Body: fileBuffer,
             ACL: acl,
+            ContentDisposition: contentDisposition,
+            ...(!!contentType && { ContentType: contentType }),
         });
 
         try {
@@ -46,8 +47,23 @@ export class PersistentStorageService {
         }
     }
 
+    public async deleteFile(key: string): Promise<void> {
+        const command = new DeleteObjectCommand({
+            Bucket: this.s3_config.bucketName,
+            Key: key,
+        });
+
+        try {
+            await this.s3_client.send(command);
+        } catch (error) {
+            throw new InternalServerErrorException(this.buildErrorMessage(error));
+        }
+    }
+
     private buildAccessUrl(key: string): string {
-        return 'https://' + this.s3_config.bucketName + this.s3_config.endpoint + '/' + key;
+        const path = key.startsWith('/') ? key : '/' + key;
+
+        return this.s3_config.endpoint + '/' + this.s3_config.bucketName + path;
     }
 
     private buildErrorMessage(error: unknown): string {

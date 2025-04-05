@@ -1,4 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, Unique } from 'typeorm';
+
+import { Upload } from '~orm/entities';
 
 import { IProduct } from '~common/interfaces';
 
@@ -8,9 +10,8 @@ import { ProductCategory } from './product-category.entity';
 @Entity()
 @Unique(['code'])
 export class Product extends BaseEntity implements IProduct {
-    static readonly TITLE_LENGTH: number = 200;
-
-    static readonly CODE_LENGTH: number = 10;
+    static readonly TITLE_LENGTH = 200;
+    static readonly CODE_LENGTH = 10;
 
     @Column({ type: 'varchar', length: Product.TITLE_LENGTH, nullable: false })
     title: string;
@@ -21,15 +22,20 @@ export class Product extends BaseEntity implements IProduct {
     @Column({ type: 'float', nullable: false })
     costPrice: number;
 
-    @Column({ type: 'float', nullable: false })
+    @Column({ type: 'float', nullable: false, default: 0 })
     markup: number;
 
-    @Column({ type: 'integer' })
+    @Column({ type: 'int', nullable: false })
     categoryId: number;
 
-    @ManyToOne(() => ProductCategory, (category) => category.products, {
-        onDelete: 'SET NULL',
-    })
-    @JoinColumn({ name: 'categoryId' })
+    @ManyToOne(() => ProductCategory, (category) => category.products, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'category_id' })
     category: ProductCategory;
+
+    @Column({ type: 'int', nullable: true })
+    imageId: number | null;
+
+    @OneToOne(() => Upload, { nullable: true, onDelete: 'SET NULL' })
+    @JoinColumn({ name: 'image_id' })
+    image: Upload | null;
 }

@@ -7,12 +7,15 @@ export class Upload implements IUpload {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    title: string;
+    @Column({ type: 'varchar', nullable: false })
+    name: string;
 
-    @Column()
+    @Column({ type: 'varchar', nullable: false })
     path: string;
 
-    @Column()
+    @Column({ type: 'varchar', nullable: false })
     mimeType: string;
+
+    @Column({ type: 'varchar', nullable: false })
+    url: string;
 }

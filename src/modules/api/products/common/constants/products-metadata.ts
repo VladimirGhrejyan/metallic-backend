@@ -39,5 +39,13 @@ export const PRODUCTS_METADATA = {
                 ID: 'id',
             },
         },
+
+        UPDATE_ONE_IMAGE: {
+            PATH: ':id/image',
+            OPERATION_ID: 'updateProductImage',
+            PARAMS: {
+                ID: 'id',
+            },
+        },
     },
 } as const satisfies IApiMetadata;
