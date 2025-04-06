@@ -38,13 +38,14 @@ export class ProductsRepository {
     }
 
     private buildGetAllQueryOptions(criteria: GetAllProductsInputDto): FindManyOptions<Product> {
-        const options = {
+        const options: FindManyOptions<Product> = {
             order: {
                 [criteria.sortBy]: criteria.order,
             },
             where: this.buildWhereConditionForGetAll(
                 this.utilsService.safePick(criteria, ['categoryId', 'search']),
             ),
+            relations: ['image'],
         };
 
         return options;
@@ -69,7 +70,7 @@ export class ProductsRepository {
         }));
     }
 
-    public async createOne(dto: CreateProductDto, manager?: EntityManager): Promise<void> {
+    public async createOne(dto: CreateProductDto, manager?: EntityManager): Promise<Product> {
         await Promise.all([
             this.checkPropertyUniquenessOrThrowException('code', dto.code, null, manager),
             this.categoriesRepository.getCategoryOrThrowException(dto.categoryId, manager),
@@ -77,7 +78,9 @@ export class ProductsRepository {
 
         const repository = this.getRepository(manager);
 
-        await repository.insert(dto);
+        const createdProduct = await repository.save(dto);
+
+        return createdProduct;
     }
 
     public async updateOne(
@@ -135,7 +138,10 @@ export class ProductsRepository {
     ): Promise<Product> {
         const repository = this.getRepository(manager);
 
-        const product = await repository.findOne({ where: { id }, relations: ['category'] });
+        const product = await repository.findOne({
+            where: { id },
+            relations: ['category', 'image'],
+        });
 
         if (!product) {
             throw new NotFoundException('Product not found');

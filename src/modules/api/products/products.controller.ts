@@ -73,16 +73,20 @@ export class ProductsController {
 
     @Post(CREATE_ONE.PATH)
     @ApiOperation({ operationId: CREATE_ONE.OPERATION_ID })
-    public async createOne(@Body() dto: CreateProductDto): Promise<void> {
+    @ZodSerializerDto(GetOneProductOutputDtoSchema)
+    @ApiOkResponse({ type: GetOneProductOutputDto })
+    public async createOne(@Body() dto: CreateProductDto): Promise<Product> {
         return this.productsService.createOne(dto);
     }
 
     @Patch(UPDATE_ONE.PATH)
     @ApiOperation({ operationId: UPDATE_ONE.OPERATION_ID })
+    @ZodSerializerDto(GetOneProductOutputDtoSchema)
+    @ApiOkResponse({ type: GetOneProductOutputDto })
     public async updateOne(
         @Param(UPDATE_ONE.PARAMS.ID, ParseIntPipe) id: number,
         @Body() dto: UpdateProductDto,
-    ): Promise<void> {
+    ): Promise<Product> {
         return this.productsService.updateOne(id, dto);
     }
 

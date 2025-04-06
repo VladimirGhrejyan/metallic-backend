@@ -1,6 +1,8 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
+import { GetOneUploadOutputDtoSchema } from '~modules/uploads';
+
 import { baseEntitySchema } from '~common/schemas';
 
 export const GetOneProductOutputDtoSchema = z
@@ -10,6 +12,7 @@ export const GetOneProductOutputDtoSchema = z
         costPrice: z.number(),
         markup: z.number(),
         categoryId: z.number(),
+        image: GetOneUploadOutputDtoSchema.nullable(),
     })
     .merge(baseEntitySchema)
     .strip();

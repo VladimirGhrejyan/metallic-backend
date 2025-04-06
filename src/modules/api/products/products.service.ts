@@ -24,12 +24,16 @@ export class ProductsService {
         return this.productsRepository.getProductOrThrowException(id);
     }
 
-    public async createOne(dto: CreateProductDto): Promise<void> {
-        return this.productsRepository.createOne(dto);
+    public async createOne(dto: CreateProductDto): Promise<Product> {
+        const createdProduct = await this.productsRepository.createOne(dto);
+
+        return this.productsRepository.getProductOrThrowException(createdProduct.id);
     }
 
-    public async updateOne(id: number, dto: UpdateProductDto): Promise<void> {
-        return this.productsRepository.updateOne(id, dto);
+    public async updateOne(id: number, dto: UpdateProductDto): Promise<Product> {
+        await this.productsRepository.updateOne(id, dto);
+
+        return this.productsRepository.getProductOrThrowException(id);
     }
 
     public async deleteOne(id: number): Promise<void> {
