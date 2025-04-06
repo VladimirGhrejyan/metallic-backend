@@ -16,6 +16,7 @@ import {
     ApiBearerAuth,
     ApiBody,
     ApiConsumes,
+    ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
     ApiTags,
@@ -67,15 +68,15 @@ export class ProductsController {
     @ApiOperation({ operationId: GET_ONE.OPERATION_ID })
     @ZodSerializerDto(GetOneProductOutputDtoSchema)
     @ApiOkResponse({ type: GetOneProductOutputDto })
-    public async getOneById(@Param(GET_ONE.PARAMS.ID, ParseIntPipe) id: number): Promise<Product> {
+    public async getOneById(@Param(GET_ONE.PARAMS.ID, ParseIntPipe) id: number) {
         return this.productsService.getOneById(id);
     }
 
     @Post(CREATE_ONE.PATH)
     @ApiOperation({ operationId: CREATE_ONE.OPERATION_ID })
     @ZodSerializerDto(GetOneProductOutputDtoSchema)
-    @ApiOkResponse({ type: GetOneProductOutputDto })
-    public async createOne(@Body() dto: CreateProductDto): Promise<Product> {
+    @ApiCreatedResponse({ type: GetOneProductOutputDto })
+    public async createOne(@Body() dto: CreateProductDto) {
         return this.productsService.createOne(dto);
     }
 
@@ -86,7 +87,7 @@ export class ProductsController {
     public async updateOne(
         @Param(UPDATE_ONE.PARAMS.ID, ParseIntPipe) id: number,
         @Body() dto: UpdateProductDto,
-    ): Promise<Product> {
+    ) {
         return this.productsService.updateOne(id, dto);
     }
 
@@ -104,7 +105,7 @@ export class ProductsController {
     public async updateOneImage(
         @Param(UPDATE_ONE_IMAGE.PARAMS.ID, ParseIntPipe) id: number,
         @UploadedFile() image: Express.Multer.File,
-    ): Promise<void> {
+    ) {
         return this.productsService.updateOneImage(id, image);
     }
 }
