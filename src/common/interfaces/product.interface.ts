@@ -8,4 +8,8 @@ export interface IProduct {
     costPrice: number;
 
     markup: number;
+
+    quantityAvailable: number;
+
+    description: string | null;
 }

@@ -12,6 +12,8 @@ export const GetOneProductOutputDtoSchema = z
         costPrice: z.number(),
         markup: z.number(),
         categoryId: z.number(),
+        quantityAvailable: z.number(),
+        description: z.string().nullable(),
         image: GetOneUploadOutputDtoSchema.nullable(),
     })
     .merge(baseEntitySchema)

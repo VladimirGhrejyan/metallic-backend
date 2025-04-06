@@ -6,7 +6,9 @@ import { positiveIntegerSchema } from '~common/schemas';
 import {
     productCodeSchema,
     productCostPriceSchema,
+    productDescriptionSchema,
     productMarkupSchema,
+    productQuantityAvailableSchema,
     productTitleSchema,
 } from '../schema';
 
@@ -21,8 +23,11 @@ const CreateProductSchema = z
         markup: productMarkupSchema,
 
         categoryId: positiveIntegerSchema,
+
+        quantityAvailable: productQuantityAvailableSchema.optional(),
+
+        description: productDescriptionSchema.optional(),
     })
-    .required()
     .strict();
 
 export class CreateProductDto extends createZodDto(CreateProductSchema) {}

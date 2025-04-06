@@ -10,8 +10,11 @@ import { ProductCategory } from './product-category.entity';
 @Entity()
 @Unique(['code'])
 export class Product extends BaseEntity implements IProduct {
-    static readonly TITLE_LENGTH = 200;
-    static readonly CODE_LENGTH = 10;
+    static readonly TITLE_LENGTH = 250;
+
+    static readonly CODE_LENGTH = 20;
+
+    static readonly DESCRIPTION_LENGTH = 1000;
 
     @Column({ type: 'varchar', length: Product.TITLE_LENGTH, nullable: false })
     title: string;
@@ -24,6 +27,12 @@ export class Product extends BaseEntity implements IProduct {
 
     @Column({ type: 'float', nullable: false, default: 0 })
     markup: number;
+
+    @Column({ type: 'int', default: 0 })
+    quantityAvailable: number;
+
+    @Column({ type: 'varchar', length: 1000, nullable: true })
+    description: string | null;
 
     @Column({ type: 'int', nullable: false })
     categoryId: number;

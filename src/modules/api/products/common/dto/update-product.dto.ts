@@ -6,7 +6,9 @@ import { positiveIntegerSchema } from '~common/schemas';
 import {
     productCodeSchema,
     productCostPriceSchema,
+    productDescriptionSchema,
     productMarkupSchema,
+    productQuantityAvailableSchema,
     productTitleSchema,
 } from '../schema';
 
@@ -21,6 +23,10 @@ const UpdateProductSchema = z
         markup: productMarkupSchema.optional(),
 
         categoryId: positiveIntegerSchema.optional(),
+
+        quantityAvailable: productQuantityAvailableSchema.optional(),
+
+        description: productDescriptionSchema.optional(),
     })
     .strict();
 
