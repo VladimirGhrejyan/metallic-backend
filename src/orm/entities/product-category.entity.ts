@@ -6,8 +6,7 @@ import { BaseEntity } from './base-entity';
 import { Product } from './product.entity';
 
 @Entity()
-@Unique(['title'])
-@Unique(['code'])
+@Unique(['title', 'code'])
 export class ProductCategory extends BaseEntity implements IProductCategory {
     static readonly TITLE_LENGTH = 200;
 
@@ -19,6 +18,6 @@ export class ProductCategory extends BaseEntity implements IProductCategory {
     @Column({ type: 'varchar', length: ProductCategory.CODE_LENGTH, nullable: false })
     code: string;
 
-    @OneToMany(() => Product, (product) => product.category)
+    @OneToMany(() => Product, (product) => product.category, { cascade: true })
     products: Product[];
 }

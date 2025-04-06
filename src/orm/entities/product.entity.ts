@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, Unique } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 import { Upload } from '~orm/entities';
 
@@ -8,7 +8,6 @@ import { BaseEntity } from './base-entity';
 import { ProductCategory } from './product-category.entity';
 
 @Entity()
-@Unique(['code'])
 export class Product extends BaseEntity implements IProduct {
     static readonly TITLE_LENGTH = 250;
 
