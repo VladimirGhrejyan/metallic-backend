@@ -17,7 +17,8 @@ export const getOrmConfig = (): PostgresConnectionOptions => ({
     entities: [path.resolve(__dirname, '../../orm/entities/**/*.entity.*{.ts,.js}')],
     namingStrategy: new SnakeNamingStrategy(),
     useUTC: true,
-    synchronize: true,
+    synchronize: false,
+    ssl: getEnvVar('DB_SSL') === 'true' ? { rejectUnauthorized: false } : undefined,
 });
 
 export const ormConfigLoader = registerAs<TGlobalConfig['orm']>(configKeys.ORM, () => ({

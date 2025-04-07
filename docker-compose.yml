@@ -19,22 +19,8 @@ services:
     ports:
       - "3000:3000"
 
-    depends_on:
-      - db
-
     env_file:
       - .env.production
 
     restart: always
-
-  db:
-    image: postgres:16-alpine
-    restart: always
-    env_file:
-      - .env.production
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
 
