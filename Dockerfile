@@ -1,5 +1,7 @@
 FROM node:22.14-alpine
 
+RUN apk add --no-cache curl
+
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -9,6 +11,7 @@ RUN npm ci --omit-dev
 COPY . .
 
 RUN chmod +x scripts/wait-for-it.sh
+RUN chmod +x scripts/deploy.sh
 
 RUN npm run build
 
