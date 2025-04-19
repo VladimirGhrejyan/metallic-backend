@@ -16,14 +16,14 @@ docker-compose up --build -d
 echo "⏳ Waiting for start container..."
 sleep 5
 
-CONTAINER_ID=$(docker ps -qf "name=app")
+CONTAINER_NAME="backend-app"
 
-if [ -z "$CONTAINER_ID" ]; then
-  echo "❌ Container not found!"
+if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+  echo "❌ Container ${CONTAINER_NAME} not found!"
   exit 1
 fi
 
-echo "🧬 Running migrations inside container $CONTAINER_ID..."
-docker exec "$CONTAINER_ID" npm run migration:run
+echo "🧬 Running migrations inside container ${CONTAINER_NAME}..."
+docker exec "$CONTAINER_NAME" npm run migration:run
 
 echo "✅ Deploy finished!"
