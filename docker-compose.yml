@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app:
+    container_name: backend-app
     build:
       context: .
       args:
@@ -14,4 +15,10 @@ services:
       - .env.production
 
     restart: always
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
