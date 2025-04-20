@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { OrderEnum } from '~common/enums';
 import { PaginationInputSchema } from '~common/helpers/pagination';
-import { OrderSchema, parseIntegerSchema } from '~common/schemas';
+import { OrderSchema, ParseIntegerSchema } from '~common/schemas';
 
 export const GetAllProductsInputDtoSchema = z
     .object({
@@ -12,7 +12,7 @@ export const GetAllProductsInputDtoSchema = z
         sortBy: z
             .enum(['title', 'code', 'costPrice', 'categoryId', 'createdAt', 'updatedAt'])
             .default('createdAt'),
-        categoryId: parseIntegerSchema({
+        categoryId: ParseIntegerSchema({
             optional: true,
             errorMessage: 'CategoryId should be positive integer',
         }),

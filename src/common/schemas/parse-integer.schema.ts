@@ -5,7 +5,7 @@ type TParseIntegerSchemaOptions = {
     optional?: boolean;
 };
 
-export const parseIntegerSchema = (options: TParseIntegerSchemaOptions) => {
+export const ParseIntegerSchema = (options: TParseIntegerSchemaOptions) => {
     const { errorMessage = 'bad request', optional = false } = options ?? {};
 
     if (optional) {
