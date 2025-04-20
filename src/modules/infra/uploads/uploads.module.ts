@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Upload } from '~orm/entities';
 
-import { PersistentStorageModule } from '~modules/persistent-storage';
+import { PersistentStorageModule } from '~modules/infra/persistent-storage';
 
 import { UploadsRepository } from './uploads.repository';
 import { UploadsService } from './uploads.service';

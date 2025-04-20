@@ -3,8 +3,9 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { TGlobalConfig } from '~config/common/types';
 
-import { CustomConfigService } from '~modules/custom-config';
-import { TUploadFileOptions } from '~modules/persistent-storage/common/types';
+import { CustomConfigService } from '~modules/core/custom-config';
+
+import { TUploadFileOptions } from './common/types';
 
 @Injectable()
 export class PersistentStorageService {

@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product, ProductCategory, Upload } from '~orm/entities';
 
 import { ProductCategoriesModule } from '~modules/api/product-categories';
-import { UploadsModule } from '~modules/uploads';
-import { UtilsModule } from '~modules/utils';
+import { UploadsModule } from '~modules/infra/uploads';
+import { UtilsModule } from '~modules/shared/utils';
 
 import { ProductsController } from './products.controller';
 import { ProductsRepository } from './products.repository';
