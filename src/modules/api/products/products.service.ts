@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { Product } from '~orm/entities';
 
-import { UploadsService } from '~modules/uploads';
+import { UploadsService } from '~modules/infra/uploads';
 
 import { IPaginationResult } from '~common/interfaces';
 

@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 import { getDateSerializerSchema } from './get-date-serializer.schema';
-import { positiveIntegerSchema } from './positive-integer.schema';
+import { PositiveIntegerSchema } from './positive-integer.schema';
 
-export const baseEntitySchema = z.object({
-    id: positiveIntegerSchema,
+export const BaseEntitySchema = z.object({
+    id: PositiveIntegerSchema,
     createdAt: getDateSerializerSchema(),
     updatedAt: getDateSerializerSchema({ nullable: true }),
     deletedAt: getDateSerializerSchema({ nullable: true }),

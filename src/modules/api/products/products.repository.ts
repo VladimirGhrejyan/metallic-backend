@@ -5,7 +5,7 @@ import { EntityManager, FindManyOptions, ILike, Repository } from 'typeorm';
 import { Product, Upload } from '~orm/entities';
 
 import { ProductCategoriesRepository } from '~modules/api/product-categories';
-import { UtilsService } from '~modules/utils';
+import { UtilsService } from '~modules/shared/utils';
 
 import { PaginationHelper } from '~common/helpers/pagination';
 import { IPaginationResult } from '~common/interfaces';

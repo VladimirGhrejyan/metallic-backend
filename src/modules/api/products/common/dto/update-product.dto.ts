@@ -1,7 +1,7 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-import { positiveIntegerSchema } from '~common/schemas';
+import { PositiveIntegerSchema } from '~common/schemas';
 
 import {
     productCodeSchema,
@@ -22,7 +22,7 @@ const UpdateProductSchema = z
 
         markup: productMarkupSchema.optional(),
 
-        categoryId: positiveIntegerSchema.optional(),
+        categoryId: PositiveIntegerSchema.optional(),
 
         quantityAvailable: productQuantityAvailableSchema.optional(),
 

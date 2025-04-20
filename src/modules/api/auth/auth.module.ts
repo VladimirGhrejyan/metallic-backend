@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
 import { UsersModule } from '~modules/api/users';
-import { CryptoModule } from '~modules/crypto';
-import { CustomConfigService } from '~modules/custom-config';
+import { CustomConfigService } from '~modules/core/custom-config';
+import { CryptoModule } from '~modules/shared/crypto';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
