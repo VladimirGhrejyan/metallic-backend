@@ -28,7 +28,7 @@ jobs:
                 echo "✅ App ready!!"
                 break
               else
-                echo "⏳ Waiting readiness (попытка $i)..."
+                echo "⏳ Waiting readiness (attempt $i)..."
                 sleep 2
               fi
             done

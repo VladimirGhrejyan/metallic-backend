@@ -8,7 +8,7 @@ echo "🚥 Stop current container..."
 docker-compose down --remove-orphans
 
 echo "📥 Pull recent changes..."
-git pull origin main
+git pull origin production
 
 echo "🔧 Build and start container..."
 docker-compose up --build -d
