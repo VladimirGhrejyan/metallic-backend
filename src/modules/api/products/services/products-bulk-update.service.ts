@@ -82,8 +82,6 @@ export class ProductsBulkUpdateService {
 
         const validItems = this.prepareItemsForUpdate(parsedContent);
 
-        console.log(validItems, 'VALID ITEMS');
-
         await this.productsRepository.bulkUpdate(validItems);
     }
 }
