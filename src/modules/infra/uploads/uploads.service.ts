@@ -2,8 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { Upload } from '~orm/entities';
 
-import { CustomConfigService } from '~modules/custom-config';
-import { PersistentStorageService } from '~modules/persistent-storage';
+import { CustomConfigService } from '~modules/core/custom-config';
+import { PersistentStorageService } from '~modules/infra/persistent-storage';
 
 import { TUploadImageOptionsType } from './common/types';
 import { UploadsRepository } from './uploads.repository';

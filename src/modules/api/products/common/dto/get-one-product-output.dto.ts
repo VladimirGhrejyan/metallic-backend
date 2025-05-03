@@ -1,9 +1,9 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-import { GetOneUploadOutputDtoSchema } from '~modules/uploads';
+import { GetOneUploadOutputDtoSchema } from '~modules/infra/uploads';
 
-import { baseEntitySchema } from '~common/schemas';
+import { BaseEntitySchema } from '~common/schemas';
 
 export const GetOneProductOutputDtoSchema = z
     .object({
@@ -16,7 +16,7 @@ export const GetOneProductOutputDtoSchema = z
         description: z.string().nullable(),
         image: GetOneUploadOutputDtoSchema.nullable(),
     })
-    .merge(baseEntitySchema)
+    .merge(BaseEntitySchema)
     .strip();
 
 export class GetOneProductOutputDto extends createZodDto(GetOneProductOutputDtoSchema) {}

@@ -1,11 +1,11 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, FindManyOptions, ILike, Repository } from 'typeorm';
+import { EntityManager, FindManyOptions, ILike, In, Repository } from 'typeorm';
 
 import { Product, Upload } from '~orm/entities';
 
 import { ProductCategoriesRepository } from '~modules/api/product-categories';
-import { UtilsService } from '~modules/utils';
+import { DataProcessingService, UtilsService } from '~modules/shared/utils';
 
 import { PaginationHelper } from '~common/helpers/pagination';
 import { IPaginationResult } from '~common/interfaces';
@@ -20,6 +20,8 @@ export class ProductsRepository {
         private readonly categoriesRepository: ProductCategoriesRepository,
 
         private readonly utilsService: UtilsService,
+
+        private readonly dataProcessingService: DataProcessingService,
     ) {}
 
     SEARCHABLE_FIELDS: Array<keyof Product> = ['code', 'title'];
@@ -101,6 +103,37 @@ export class ProductsRepository {
         const repository = this.getRepository(manager);
 
         await repository.update({ id }, { ...existingProduct, ...dto });
+    }
+
+    public async bulkUpdate(products: UpdateProductDto[]): Promise<void> {
+        if (!products.length) {
+            return;
+        }
+
+        const codes = products.map(({ code }) => code);
+
+        const existingProducts = await this.productsRepository.find({
+            where: { code: In(codes) },
+            select: ['code'],
+        });
+
+        const existingCodesDict = this.utilsService.keyBy(existingProducts, 'code');
+
+        const itemsToUpdate = products.filter(({ code }) => existingCodesDict[code]);
+
+        await this.dataProcessingService.processWithConcurrency(itemsToUpdate, 5, async (item) => {
+            const { code, ...dataForUpdate } = item;
+
+            if (this.utilsService.isEmptyObject(dataForUpdate)) {
+                return;
+            }
+
+            try {
+                await this.productsRepository.update({ code }, dataForUpdate);
+            } catch (error) {
+                console.error(`Failed to update product ${code}:`, error);
+            }
+        });
     }
 
     public async deleteOne(id: Product['id'], manager?: EntityManager): Promise<void> {

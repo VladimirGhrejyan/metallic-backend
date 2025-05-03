@@ -2,18 +2,20 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { Product } from '~orm/entities';
 
-import { UploadsService } from '~modules/uploads';
+import { UploadsService } from '~modules/infra/uploads';
 
 import { IPaginationResult } from '~common/interfaces';
 
 import { CreateProductDto, GetAllProductsInputDto, UpdateProductDto } from './common/dto';
 import { ProductsRepository } from './products.repository';
+import { ProductsBulkUpdateService } from './services';
 
 @Injectable()
 export class ProductsService {
     constructor(
         private readonly productsRepository: ProductsRepository,
         private readonly uploadsService: UploadsService,
+        private readonly bulkUpdateService: ProductsBulkUpdateService,
     ) {}
 
     public async getAll(criteria: GetAllProductsInputDto): Promise<IPaginationResult<Product>> {
@@ -56,5 +58,9 @@ export class ProductsService {
         });
 
         await this.productsRepository.updateOneImage(id, uploadedImage.id);
+    }
+
+    public async bulkUpdateFromXlsx(file: Express.Multer.File): Promise<void> {
+        return this.bulkUpdateService.bulkUpdate(file);
     }
 }

@@ -47,5 +47,10 @@ export const PRODUCTS_METADATA = {
                 ID: 'id',
             },
         },
+
+        UPDATE_MANY: {
+            PATH: 'bulk',
+            OPERATION_ID: 'bulkUpdateProducts',
+        },
     },
 } as const satisfies IApiMetadata;

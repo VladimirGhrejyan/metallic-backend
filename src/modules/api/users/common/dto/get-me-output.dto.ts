@@ -1,11 +1,11 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-import { positiveIntegerSchema } from '~common/schemas';
+import { PositiveIntegerSchema } from '~common/schemas';
 
 export const GetMeOutputDtoSchema = z
     .object({
-        id: positiveIntegerSchema,
+        id: PositiveIntegerSchema,
         email: z.string(),
     })
     .strip();

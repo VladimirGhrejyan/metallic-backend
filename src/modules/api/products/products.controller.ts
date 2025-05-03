@@ -25,10 +25,18 @@ import { ZodSerializerDto } from 'nestjs-zod';
 
 import { Product } from '~orm/entities';
 
+import { SkipAuth } from '~modules/api/auth/decorators';
+
 import { ZodApiQuery } from '~common/decorators';
 import { IPaginationResult } from '~common/interfaces';
 
-import { IMAGE_KEY, PRODUCTS_METADATA, UPDATE_ONE_IMAGE_API_BODY } from './common/constants';
+import {
+    FILE_KEY,
+    IMAGE_KEY,
+    PRODUCTS_METADATA,
+    UPDATE_MANY_API_BODY,
+    UPDATE_ONE_IMAGE_API_BODY,
+} from './common/constants';
 import {
     CreateProductDto,
     GetAllProductsInputDto,
@@ -44,7 +52,7 @@ import { ProductsService } from './products.service';
 const {
     PREFIX,
     TAGS,
-    ROUTES: { GET_ALL, GET_ONE, CREATE_ONE, UPDATE_ONE, DELETE_ONE, UPDATE_ONE_IMAGE },
+    ROUTES: { GET_ALL, GET_ONE, CREATE_ONE, UPDATE_ONE, DELETE_ONE, UPDATE_ONE_IMAGE, UPDATE_MANY },
 } = PRODUCTS_METADATA;
 
 @ApiBearerAuth()
@@ -78,6 +86,16 @@ export class ProductsController {
     @ApiCreatedResponse({ type: GetOneProductOutputDto })
     public async createOne(@Body() dto: CreateProductDto) {
         return this.productsService.createOne(dto);
+    }
+
+    @SkipAuth()
+    @Patch(UPDATE_MANY.PATH)
+    @ApiOperation({ operationId: UPDATE_MANY.OPERATION_ID })
+    @ApiConsumes('multipart/form-data')
+    @ApiBody(UPDATE_MANY_API_BODY)
+    @UseInterceptors(FileInterceptor(FILE_KEY))
+    public async updateMany(@UploadedFile() file: Express.Multer.File): Promise<void> {
+        return this.productsService.bulkUpdateFromXlsx(file);
     }
 
     @Patch(UPDATE_ONE.PATH)

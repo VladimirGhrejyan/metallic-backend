@@ -46,8 +46,9 @@
         "bcrypt": "^5.1.1",
         "cross-env": "^7.0.3",
         "dotenv": "^16.4.7",
-        "lodash.pick": "^4.4.0",
+        "lodash": "^4.17.21",
         "nestjs-zod": "^4.3.1",
+        "p-map": "^7.0.3",
         "passport": "^0.7.0",
         "passport-jwt": "^4.0.1",
         "passport-local": "^1.0.0",
@@ -56,6 +57,7 @@
         "rxjs": "^7.8.1",
         "typeorm": "^0.3.20",
         "typeorm-naming-strategies": "^4.1.0",
+        "xlsx": "^0.18.5",
         "zod": "^3.23.8"
     },
     "devDependencies": {
@@ -71,7 +73,7 @@
         "@types/bcrypt": "^5.0.2",
         "@types/express": "^5.0.0",
         "@types/jest": "^29.5.2",
-        "@types/lodash.pick": "^4.4.9",
+        "@types/lodash": "^4.17.16",
         "@types/multer": "^1.4.12",
         "@types/node": "^20.3.1",
         "@types/supertest": "^6.0.0",

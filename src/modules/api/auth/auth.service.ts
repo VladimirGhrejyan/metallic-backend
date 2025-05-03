@@ -4,8 +4,8 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '~orm/entities';
 
 import { UsersRepository } from '~modules/api/users';
-import { CryptoService } from '~modules/crypto';
-import { UtilsService } from '~modules/utils';
+import { CryptoService } from '~modules/shared/crypto';
+import { UtilsService } from '~modules/shared/utils';
 
 import { SignUpInputDto } from './common/dto';
 import { TAccessToken } from './common/types';
