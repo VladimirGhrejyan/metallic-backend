@@ -1,7 +1,12 @@
 import { Module } from '@nestjs/common';
 
 import { CryptoModule } from './crypto';
-import { UtilsModule } from './utils';
+import { UtilsModule, UtilsService } from './utils';
+import { XlsxModule } from './xlsx';
 
-@Module({ imports: [UtilsModule, CryptoModule], exports: [UtilsModule, CryptoModule] })
+@Module({
+    imports: [UtilsModule, CryptoModule, XlsxModule],
+    exports: [UtilsModule, CryptoModule, XlsxModule],
+    providers: [UtilsService],
+})
 export class SharedModule {}

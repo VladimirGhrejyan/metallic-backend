@@ -12,11 +12,11 @@ import {
     productTitleSchema,
 } from '../schema';
 
-const UpdateProductSchema = z
+export const UpdateProductSchema = z
     .object({
-        title: productTitleSchema.optional(),
+        code: productCodeSchema,
 
-        code: productCodeSchema.optional(),
+        title: productTitleSchema.optional(),
 
         costPrice: productCostPriceSchema.optional(),
 
