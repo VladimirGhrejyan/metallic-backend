@@ -1,3 +1,3 @@
 import { z } from 'zod';
 
-export const productQuantityAvailableSchema = z.number().min(0);
+export const productQuantityAvailableSchema = z.number().int().min(0);
