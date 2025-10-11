@@ -24,7 +24,7 @@ async function bootstrap() {
     await openApiService.initOpenApi(app);
 
     await app.listen(PORT, () => {
-        console.log(`Server started on port ${PORT}`, `Environment: ${process.env.NODE_ENV}`);
+        console.log(`Server running on port ${PORT}`, `Environment: ${process.env.NODE_ENV}`);
     });
 }
 
