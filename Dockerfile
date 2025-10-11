@@ -20,4 +20,4 @@ ENV NODE_ENV=${NODE_ENV}
 
 EXPOSE 3000
 
-CMD ["./scripts/wait-for-it.sh", "db-metallic-fra1-24631-do-user-19991779-0.l.db.ondigitalocean.com", "25060", "--", "node", "dist/src/main.js"]
+CMD ["./scripts/wait-for-it.sh", "db-postgresql-fra1-07425-do-user-19991779-0.f.db.ondigitalocean.com", "25060", "--", "node", "dist/src/main.js"]
