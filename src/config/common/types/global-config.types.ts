@@ -19,6 +19,8 @@ type StorageConfig = {
     bucketName: TEnvironment['STORAGE_BUCKET_NAME'];
     accessKeyId: TEnvironment['STORAGE_ACCESS_KEY_ID'];
     secretAccessKey: TEnvironment['STORAGE_SECRET_ACCESS_KEY'];
+    bucketRootFolder: TEnvironment['STORAGE_BUCKET_ROOT_FOLDER'];
+    bucketPublicURL: TEnvironment['STORAGE_BUCKET_PUBLIC_URL'];
 };
 
 export type TGlobalConfig = {
