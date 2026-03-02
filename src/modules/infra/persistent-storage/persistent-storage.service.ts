@@ -64,7 +64,7 @@ export class PersistentStorageService {
     private buildAccessUrl(key: string): string {
         const path = key.startsWith('/') ? key : '/' + key;
 
-        return this.s3_config.endpoint + '/' + this.s3_config.bucketName + path;
+        return this.s3_config.bucketPublicURL + path;
     }
 
     private buildErrorMessage(error: unknown): string {
