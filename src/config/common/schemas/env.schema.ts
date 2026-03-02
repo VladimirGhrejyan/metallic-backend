@@ -24,4 +24,6 @@ export const envSchema = z.object({
     STORAGE_ACCESS_KEY_ID: z.string(),
     STORAGE_SECRET_ACCESS_KEY: z.string(),
     STORAGE_BUCKET_NAME: z.string(),
+    STORAGE_BUCKET_ROOT_FOLDER: z.string(),
+    STORAGE_BUCKET_PUBLIC_URL: z.string(),
 });

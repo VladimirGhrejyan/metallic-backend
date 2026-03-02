@@ -84,7 +84,15 @@ export class UploadsService {
 
         const timestamp = new Date().getTime();
 
-        return nodeEnv + '/' + timestamp + '_' + name;
+        return (
+            this.configService.get('storage').bucketRootFolder +
+            '/' +
+            nodeEnv +
+            '/' +
+            timestamp +
+            '_' +
+            name
+        );
     }
 
     private validateImageMimeType(mimeType?: string): void {
