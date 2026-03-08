@@ -2,7 +2,7 @@
 
 set -e
 
-cd ~/app || exit 1
+cd /var/www/backend || exit 1
 
 echo "🚥 Stop current container..."
 docker-compose down --remove-orphans
