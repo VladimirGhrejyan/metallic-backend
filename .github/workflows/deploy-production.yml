@@ -19,7 +19,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             echo "📦 Start deploy on server..."
-            bash ~/app/scripts/deploy.sh
+            bash /var/www/backend/scripts/deploy.sh
 
             echo "🔍 healthcheck..."
             for i in {1..10}; do
