@@ -22,19 +22,18 @@ export class PersistentStorageService {
                 accessKeyId: this.s3_config.accessKeyId,
             },
             endpoint: this.s3_config.endpoint,
-            region: this.s3_config.region,
+            region: 'auto',
             forcePathStyle: true,
         });
     }
 
     public async uploadFile(fileBuffer: Buffer, options: TUploadFileOptions): Promise<string> {
-        const { key, contentType, acl = 'public-read', contentDisposition = 'inline' } = options;
+        const { key, contentType, contentDisposition = 'inline' } = options;
 
         const command = new PutObjectCommand({
             Bucket: this.s3_config.bucketName,
             Key: key,
             Body: fileBuffer,
-            ACL: acl,
             ContentDisposition: contentDisposition,
             ...(!!contentType && { ContentType: contentType }),
         });
@@ -44,6 +43,7 @@ export class PersistentStorageService {
 
             return this.buildAccessUrl(key);
         } catch (error) {
+            console.log(error, 'ERROR');
             throw new InternalServerErrorException(this.buildErrorMessage(error));
         }
     }
