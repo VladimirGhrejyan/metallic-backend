@@ -6,12 +6,21 @@ import { ExceptionFilter } from '~app/filters';
 import { AuthModule } from './auth';
 import { JwtGuard } from './auth/guards';
 import { JwtStrategy } from './auth/strategy';
+import { ClientsModule } from './clients';
+import { OrdersModule } from './orders';
 import { ProductCategoriesModule } from './product-categories';
 import { ProductsModule } from './products';
 import { UsersModule } from './users';
 
 @Module({
-    imports: [AuthModule, UsersModule, ProductCategoriesModule, ProductsModule],
+    imports: [
+        AuthModule,
+        UsersModule,
+        ProductCategoriesModule,
+        ProductsModule,
+        ClientsModule,
+        OrdersModule,
+    ],
     providers: [
         {
             provide: APP_GUARD,
