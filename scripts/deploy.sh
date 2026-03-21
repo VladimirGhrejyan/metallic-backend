@@ -5,13 +5,13 @@ set -e
 cd /var/www/backend || exit 1
 
 echo "🚥 Stop current container..."
-docker-compose down --remove-orphans
+docker compose down --remove-orphans
 
 echo "📥 Pull recent changes..."
 git pull origin production
 
 echo "🔧 Build and start container..."
-docker-compose up --build -d
+docker compose up --build -d
 
 echo "⏳ Waiting for start container..."
 sleep 5
