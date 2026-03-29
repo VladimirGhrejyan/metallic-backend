@@ -19,9 +19,9 @@ export const PaginationInputSchema = z.object({
         .default('10')
         .transform((val) => {
             const parsed = parseInt(val, 10);
-            return isNaN(parsed) ? 10 : Math.min(Math.max(parsed, 1), 500);
+            return isNaN(parsed) ? 10 : Math.min(Math.max(parsed, 1), 1000);
         })
-        .refine((val) => val >= 1 && val <= 500, {
-            message: 'Items per page must be between 1 and 500',
+        .refine((val) => val >= 1 && val <= 1000, {
+            message: 'Items per page must be between 1 and 1000',
         }),
 });
